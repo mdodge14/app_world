@@ -1,0 +1,14 @@
+# -*- coding: utf-8 -*-
+
+import logging
+
+from odoo import api, fields, models, tools, SUPERUSER_ID, _
+
+_logger = logging.getLogger(__name__)
+
+class Question(models.Model):
+    _name = "question"
+    _description = "Question"
+    # _order = "name"
+
+    name = fields.Char(index=True, string='Question')

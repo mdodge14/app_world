@@ -1,23 +1,27 @@
 <?xml version="1.0"?>
 <odoo>
 
-  <!-- ACTION -->
-  <record model='ir.actions.act_window' id='action_launch'>
-    <field name="name">Challenges</field>
-    <field name="res_model">challenge</field>
-    <field name="view_mode">tree,kanban,form</field>
-    <field name="help" type="html">
-      <p class="oe_view_nocontent_create">
-        Click to start a new challege.
-      </p>
-    </field>
-  </record>
-
   <menuitem
       name="World of Questions"
-      id="base_menu_app_world"
+      id="base_menu_world_of_questions"
       groups="base.group_user"
-      action="action_launch"
+      action="action_challenges"
       web_icon="account_consolidation,static/description/icon.png"/>
+
+  <menuitem
+      name="Challenges"
+      id="menu_challenges"
+      groups="base.group_user"
+      parent="base_menu_world_of_questions"
+      sequence="1"
+      action="action_challenges"/>
+
+  <menuitem
+      name="Questions"
+      id="menu_questions"
+      groups="base.group_user"
+      parent="base_menu_world_of_questions"
+      sequence="2"
+      action="action_questions"/>
 
 </odoo>

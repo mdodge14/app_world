@@ -1,2 +1,5 @@
 "id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
 access_challenge,access_challenge,model_challenge,base.group_user,1,1,1,1
+access_solution,access_solution,model_solution,base.group_user,1,1,1,1
+access_question,access_question,model_question,base.group_user,1,1,1,1
+access_answer,access_answer,model_answer,base.group_user,1,1,1,1

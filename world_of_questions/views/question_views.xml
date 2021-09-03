@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<odoo>
+
+  <record model='ir.actions.act_window' id='action_questions'>
+    <field name="name">Questions</field>
+    <field name="res_model">question</field>
+    <field name="view_mode">tree,kanban,form</field>
+    <field name="help" type="html">
+      <p class="oe_view_nocontent_create">
+        Click to add a new question.
+      </p>
+    </field>
+  </record>
+
+</odoo>

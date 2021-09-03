@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<odoo>
+
+<!--  <record model='ir.ui.view' id='challenge_form'>-->
+<!--    <field name="name">challenge_form</field>-->
+<!--    <field name="model">challenge</field>-->
+<!--    <field name="arch" type="xml">-->
+<!--      <form string="Challenge">-->
+<!--      </form>-->
+<!--    </field>-->
+<!--  </record>-->
+
+  <record model='ir.actions.act_window' id='action_challenges'>
+    <field name="name">Challenges</field>
+    <field name="res_model">challenge</field>
+    <field name="view_mode">tree,kanban,form</field>
+    <field name="help" type="html">
+      <p class="oe_view_nocontent_create">
+        Click to start a new challege.
+      </p>
+    </field>
+  </record>
+
+</odoo>
