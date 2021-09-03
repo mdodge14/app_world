@@ -9,7 +9,7 @@ _logger = logging.getLogger(__name__)
 class Question(models.Model):
     _name = "question"
     _description = "Question"
-    # _order = "name"
+    _order = "sequence, name"
 
     name = fields.Char(index=True, string='Question')
     sequence = fields.Integer('Sequence', index=True)
