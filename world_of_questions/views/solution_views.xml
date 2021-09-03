@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<odoo>
+
+  <record model='ir.ui.view' id='solution_tree'>
+    <field name="name">solution_tree</field>
+    <field name="model">solution</field>
+    <field name="arch" type="xml">
+      <tree string="Solutions">
+        <field name="name" />
+      </tree>
+    </field>
+  </record>
+
+  <record model='ir.actions.act_window' id='action_solutions'>
+    <field name="name">Solutions</field>
+    <field name="res_model">solution</field>
+    <field name="view_mode">tree,kanban,form</field>
+    <field name="help" type="html">
+      <p class="oe_view_nocontent_create">
+        Click to add a new solution.
+      </p>
+    </field>
+  </record>
+
+</odoo>

@@ -13,6 +13,7 @@
         'security/ir.model.access.csv',
         'views/challenge_views.xml',
         'views/question_views.xml',
+        'views/solution_views.xml',
         'views/menu_views.xml',
     ],
     'development_status': 'Production/Stable',

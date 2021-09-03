@@ -24,4 +24,12 @@
       sequence="2"
       action="action_questions"/>
 
+  <menuitem
+      name="Solutions"
+      id="menu_solutions"
+      groups="base.group_user"
+      parent="base_menu_world_of_questions"
+      sequence="3"
+      action="action_solutions"/>
+
 </odoo>
