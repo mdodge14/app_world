@@ -5,7 +5,7 @@
     <field name="name">answer_tree</field>
     <field name="model">answer</field>
     <field name="arch" type="xml">
-      <tree string="Answers" editable="top" >
+      <tree string="Answers" editable="bottom" >
         <field name="solution_id" />
         <field name="question_id" />
         <field name="answer" />
