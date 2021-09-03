@@ -11,6 +11,7 @@
     ],
     'data': [
         'security/ir.model.access.csv',
+        'views/answer_views.xml',
         'views/challenge_views.xml',
         'views/question_views.xml',
         'views/solution_views.xml',

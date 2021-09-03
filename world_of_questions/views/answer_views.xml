@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<odoo>
+
+  <record model='ir.ui.view' id='answer_tree'>
+    <field name="name">answer_tree</field>
+    <field name="model">answer</field>
+    <field name="arch" type="xml">
+      <tree string="Answers" editable="top" >
+        <field name="solution_id" />
+        <field name="question_id" />
+        <field name="answer" />
+      </tree>
+    </field>
+  </record>
+
+  <record model='ir.actions.act_window' id='action_answers'>
+    <field name="name">Answers</field>
+    <field name="res_model">answer</field>
+    <field name="view_mode">tree,kanban,form</field>
+    <field name="help" type="html">
+      <p class="oe_view_nocontent_create">
+        Click to add a new answer.
+      </p>
+    </field>
+  </record>
+
+</odoo>

@@ -32,4 +32,12 @@
       sequence="3"
       action="action_solutions"/>
 
+  <menuitem
+      name="Answers"
+      id="menu_answers"
+      groups="base.group_user"
+      parent="base_menu_world_of_questions"
+      sequence="4"
+      action="action_answers"/>
+
 </odoo>
