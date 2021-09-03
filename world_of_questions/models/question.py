@@ -12,3 +12,4 @@ class Question(models.Model):
     # _order = "name"
 
     name = fields.Char(index=True, string='Question')
+    sequence = fields.Integer('Sequence', index=True)

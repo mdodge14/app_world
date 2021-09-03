@@ -1,6 +1,17 @@
 <?xml version="1.0"?>
 <odoo>
 
+  <record model='ir.ui.view' id='question_tree'>
+    <field name="name">question_tree</field>
+    <field name="model">question</field>
+    <field name="arch" type="xml">
+      <tree string="Questions">
+        <field name="sequence" widget="handle"/>
+        <field name="name" />
+      </tree>
+    </field>
+  </record>
+
   <record model='ir.actions.act_window' id='action_questions'>
     <field name="name">Questions</field>
     <field name="res_model">question</field>
