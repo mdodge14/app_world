@@ -18,16 +18,14 @@ class Challenge(models.Model):
 
     def yes_action(self):
         if self.state in ('new', 'not playing'):
-            self.name = "Great! I'll be the guesser."
-            self.message = "Do you know what you are?"
+            self.message = "Great! I'll be the guesser. Do you know what you are?"
             self.state = 'ready'
         elif self.state in ('ready', 'ask'):
             self.ask_question()
 
     def no_action(self):
         if self.state in ('new', 'ready'):
-            self.name = "OK, no problem."
-            self.message = "I'll be here when you're ready to play."
+            self.message = "OK, no problem. I'll be here when you're ready to play."
             self.state = 'not playing'
         elif self.state == 'ask':
             self.ask_question()
