@@ -17,14 +17,14 @@ class Challenge(models.Model):
     asked_question_ids = fields.Many2many('question', 'challenge_asked_questions', 'cid', 'qid')
 
     def yes_action(self):
-        if self.state in ('new', 'not playing'):
+        if self.state in ('new', 'not playing', 'done'):
             self.message = "Great! I'll be the guesser. Do you know what you are?"
             self.state = 'ready'
         elif self.state in ('ready', 'ask'):
             self.ask_question()
 
     def no_action(self):
-        if self.state in ('new', 'ready'):
+        if self.state in ('new', 'ready', 'done'):
             self.message = "OK, no problem. I'll be here when you're ready to play."
             self.state = 'not playing'
         elif self.state == 'ask':
@@ -46,3 +46,10 @@ class Challenge(models.Model):
         self.name = "Question #{}".format(number)
         self.message = "{}?".format(question.name)
         self.state = 'ask'
+
+    def solution_found(self):
+        self.state = 'done'
+        self.name = "I knew it!"
+        self.message = "Would you like to play again?"
+        self.asked_question_ids = [(5, 0, 0)]
+
