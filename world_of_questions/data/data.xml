@@ -1,5 +1,5 @@
 <data noupdate="0">
     <record model="challenge" id="game_play">
-        <field name="name"> </field>
+        <field name="name">Hi there, would you like to play 20 questions?</field>
     </record>
 </data>

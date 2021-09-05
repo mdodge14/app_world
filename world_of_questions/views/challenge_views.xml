@@ -6,7 +6,11 @@
     <field name="model">challenge</field>
     <field name="arch" type="xml">
       <form string="Challenge" create="false" edit="false" delete="false">
-<!--        <field name="message"/>-->
+        <div class="oe_title">
+            <h2>
+                <field name="message"/>
+            </h2>
+        </div>
         <field name="state" invisible="1"/>
         <button string="Yes" style="width:33%%" name="yes_action" type="object" class="btn-primary" attrs="{'invisible': [('state', '=', 'not playing')]}"/>
         <button string="No" style="width:33%%" name="no_action" type="object" class="btn-secondary" attrs="{'invisible': [('state', '=', 'not playing')]}"/>
