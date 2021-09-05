@@ -10,6 +10,7 @@
         'base',
     ],
     'data': [
+        'data/data.xml',
         'security/ir.model.access.csv',
         'views/answer_views.xml',
         'views/challenge_views.xml',

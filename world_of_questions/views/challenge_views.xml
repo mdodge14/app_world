@@ -5,28 +5,24 @@
     <field name="name">challenge_form</field>
     <field name="model">challenge</field>
     <field name="arch" type="xml">
-      <form string="Challenge">
+      <form string="Challenge" create="false" edit="false" delete="false">
+<!--        <field name="message"/>-->
         <field name="state" invisible="1"/>
-        <field name="message"/>
-        <group col="6">
-          <button string="Yes" name="yes_action" type="object" class="btn-primary" attrs="{'invisible': [('state', '=', 'not playing')]}"/>
-          <button string="No" name="no_action" type="object" class="btn-secondary" attrs="{'invisible': [('state', '=', 'not playing')]}"/>
-          <button string="Ready to play?" name="yes_action" type="object" class="btn-primary" attrs="{'invisible': [('state', '!=', 'not playing')]}"/>
+        <button string="Yes" style="width:33%%" name="yes_action" type="object" class="btn-primary" attrs="{'invisible': [('state', '=', 'not playing')]}"/>
+        <button string="No" style="width:33%%" name="no_action" type="object" class="btn-secondary" attrs="{'invisible': [('state', '=', 'not playing')]}"/>
+        <button string="Ready to play" style="width:33%%" name="yes_action" type="object" class="btn-primary" attrs="{'invisible': [('state', '!=', 'not playing')]}"/>
+        <group>
+          <button string="Start over" name="start_over" type="object" class="btn-link"/>
         </group>
-        <button string="Start over" name="start_over" type="object" class="btn-secondary"/>
       </form>
     </field>
   </record>
 
-  <record model='ir.actions.act_window' id='action_challenges'>
-    <field name="name">Challenges</field>
+  <record model='ir.actions.act_window' id='action_play'>
+    <field name="name">Play</field>
     <field name="res_model">challenge</field>
-    <field name="view_mode">tree,kanban,form</field>
-    <field name="help" type="html">
-      <p class="oe_view_nocontent_create">
-        Click to start a new challege.
-      </p>
-    </field>
+    <field name="view_mode">form</field>
+    <field name="res_id" ref="world_of_questions.game_play"/>
   </record>
 
 </odoo>

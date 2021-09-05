@@ -5,16 +5,16 @@
       name="World of Questions"
       id="base_menu_world_of_questions"
       groups="base.group_user"
-      action="action_challenges"
+      action="action_play"
       web_icon="account_consolidation,static/description/icon.png"/>
 
   <menuitem
-      name="Challenges"
+      name="Play"
       id="menu_challenges"
       groups="base.group_user"
       parent="base_menu_world_of_questions"
       sequence="1"
-      action="action_challenges"/>
+      action="action_play"/>
 
   <menuitem
       name="Questions"

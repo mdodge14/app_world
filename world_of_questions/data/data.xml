@@ -1,0 +1,5 @@
+<data noupdate="0">
+    <record model="challenge" id="game_play">
+        <field name="name"> </field>
+    </record>
+</data>
