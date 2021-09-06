@@ -18,8 +18,16 @@ class Challenge(models.Model):
     asked_question_ids = fields.Many2many('question', 'challenge_asked_questions', 'cid', 'qid')
     possible_solutions = fields.Many2many('solution', 'challenge_possible_solutions', 'cid', 'sid')
 
+    # TODO: Tatum bug
+    # TODO: Flag questions and/or answers as "solution guesses".
+    #           If only one possible solution, make the solution guess instead of asking all questions for it
+    #           If asking a solution question, highlight "You guessed it button"
+    # TODO: Test/answer questions
+    # TODO: Kind of / Not sure buttons
+    # TODO: Kind of answer option
     # TODO: If guessed solution, capture any learned answers
     # TODO: If reached 20 questions, message "lost" and ask for solution, then a question that would have been good to ask with the answer
+    # TODO: Find/add data sources (e.g. reptile classifications, plant classifications, etc)
     def yes_action(self):
         if self.state in ('new', 'not playing', 'done'):
             self.message = "Great! I'll be the guesser. Do you know what you are?"
@@ -97,17 +105,17 @@ class Challenge(models.Model):
 
             best_question = questions[0]
             best_number_eliminated = 0
-            if best_question.id in yes_answers and best_question.id in no_answers and yes_answers[question.id] >= no_answers[question.id]:
-                best_number_eliminated = no_answers[question.id]
-            elif best_question.id in yes_answers and best_question.id in no_answers and yes_answers[question.id] < no_answers[question.id]:
-                best_number_eliminated = no_answers[question.id]
+            if best_question.id in yes_answers and best_question.id in no_answers and yes_answers[best_question.id] >= no_answers[best_question.id]:
+                best_number_eliminated = no_answers[best_question.id]
+            elif best_question.id in yes_answers and best_question.id in no_answers and yes_answers[best_question.id] < no_answers[best_question.id]:
+                best_number_eliminated = yes_answers[best_question.id]
             for question in questions:
                 if question.id != best_question.id:
                     number_eliminated = 0
                     if question.id in yes_answers and question.id in no_answers and yes_answers[question.id] >= no_answers[question.id]:
                         number_eliminated = no_answers[question.id]
                     elif question.id in yes_answers and question.id in no_answers and yes_answers[question.id] < no_answers[question.id]:
-                        number_eliminated = no_answers[question.id]
+                        number_eliminated = yes_answers[question.id]
                     if number_eliminated > best_number_eliminated:
                         best_question = question
                         best_number_eliminated = number_eliminated
