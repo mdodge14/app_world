@@ -76,15 +76,14 @@ class Challenge(models.Model):
             answer = self.env['answer'].search([('solution_id', '=', self.possible_solutions[0].id), ('is_solution', '=', True)], limit=1)
             self.ask_question(answer.question_id)
             return True
-        for solution in self.possible_solutions:
-            answer = self.env['answer'].search([('question_id', '=', self.question_id.id), ('solution_id', '=', solution.id), ('answer', '=', yes_or_no)], limit=1)
-            if answer.id:
-                new_answer = self.env['answer'].search([('solution_id', '=', solution.id), ('question_id', 'in', remaining_questions.ids)], limit=1)
-                if new_answer.id:
-                    self.ask_question(new_answer.question_id)
-                    return True
-        else:
-            return False
+        # for solution in self.possible_solutions:
+        #     answer = self.env['answer'].search([('question_id', '=', self.question_id.id), ('solution_id', '=', solution.id), ('answer', '=', yes_or_no)], limit=1)
+        #     if answer.id:
+        #         new_answer = self.env['answer'].search([('solution_id', '=', solution.id), ('question_id', 'in', remaining_questions.ids)], limit=1)
+        #         if new_answer.id:
+        #             self.ask_question(new_answer.question_id)
+        #             return True
+        return False
 
     def ask_next_question(self):
         questions = self.get_remaining_questions()
