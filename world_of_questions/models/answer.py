@@ -15,3 +15,4 @@ class Answer(models.Model):
     solution_id = fields.Many2one('solution', string='Solution')
     question_id = fields.Many2one('question', string='Question')
     answer = fields.Selection([('yes', 'Yes'), ('no', 'No')], string='Yes/No')
+    is_solution = fields.Boolean()

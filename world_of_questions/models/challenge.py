@@ -17,11 +17,8 @@ class Challenge(models.Model):
     question_id = fields.Many2one('question', string='Question')
     asked_question_ids = fields.Many2many('question', 'challenge_asked_questions', 'cid', 'qid')
     possible_solutions = fields.Many2many('solution', 'challenge_possible_solutions', 'cid', 'sid')
+    question_is_possible_solution = fields.Boolean()
 
-    # TODO: Tatum bug
-    # TODO: Flag questions and/or answers as "solution guesses".
-    #           If only one possible solution, make the solution guess instead of asking all questions for it
-    #           If asking a solution question, highlight "You guessed it button"
     # TODO: Test/answer questions
     # TODO: Kind of / Not sure buttons
     # TODO: Kind of answer option
@@ -54,6 +51,7 @@ class Challenge(models.Model):
         self.message = "Would you like to play 20 questions?"
         self.asked_question_ids = [(5, 0, 0)]
         self.possible_solutions = self.env['solution'].search([])
+        self.question_is_possible_solution = False
 
     def eliminate_solutions(self, yes_or_no):
         remove = []
@@ -72,7 +70,12 @@ class Challenge(models.Model):
         return questions
 
     def check_for_solution_question(self, yes_or_no):
+        self.question_is_possible_solution = False
         remaining_questions = self.get_remaining_questions()
+        if len(self.possible_solutions) == 1:
+            answer = self.env['answer'].search([('solution_id', '=', self.possible_solutions[0].id), ('is_solution', '=', True)], limit=1)
+            self.ask_question(answer.question_id)
+            return True
         for solution in self.possible_solutions:
             answer = self.env['answer'].search([('question_id', '=', self.question_id.id), ('solution_id', '=', solution.id), ('answer', '=', yes_or_no)], limit=1)
             if answer.id:
@@ -130,6 +133,9 @@ class Challenge(models.Model):
         self.name = "Question #{}".format(number)
         self.message = "{}?".format(self.question_id.name)
         self.state = 'ask'
+        is_possible_solution = self.env['answer'].search([('question_id', '=', question.id), ('is_solution', '=', True)], limit=1)
+        if is_possible_solution.id:
+            self.question_is_possible_solution = True
 
     def solution_found(self):
         self.state = 'done'
@@ -137,4 +143,5 @@ class Challenge(models.Model):
         self.message = "Would you like to play again?"
         self.asked_question_ids = [(5, 0, 0)]
         self.possible_solutions = self.env['solution'].search([])
+        self.question_is_possible_solution = False
 

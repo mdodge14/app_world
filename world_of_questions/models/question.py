@@ -13,3 +13,4 @@ class Question(models.Model):
 
     name = fields.Char(index=True, string='Question')
     sequence = fields.Integer('Sequence', index=True)
+    possible_solution = fields.Boolean()

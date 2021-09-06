@@ -12,10 +12,9 @@
             </h2>
         </div>
         <field name="state" invisible="1"/>
-        <group style="width:33%%">
-          <button string="You guessed it!" style="width:33%%" name="solution_found" type="object" attrs="{'invisible': [('state', 'in', ('ready', 'not playing', 'new', 'done'))]}"/>
-        </group>
-        <br/>
+        <field name="question_is_possible_solution" invisible="1"/>
+        <button string="You guessed it!" style="width:33%%" name="solution_found" type="object" class="btn-secondary" attrs="{'invisible': ['|', ('question_is_possible_solution', '=', False), ('state', 'in', ('ready', 'not playing', 'new', 'done'))]}"/>
+        <br/><br/>
         <button string="Yes" style="width:33%%" name="yes_action" type="object" class="btn-primary" attrs="{'invisible': [('state', '=', 'not playing')]}"/>
         <button string="No" style="width:33%%" name="no_action" type="object" class="btn-secondary" attrs="{'invisible': [('state', '=', 'not playing')]}"/>
         <button string="Ready to play" style="width:33%%" name="yes_action" type="object" class="btn-primary" attrs="{'invisible': [('state', '!=', 'not playing')]}"/>
