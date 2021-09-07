@@ -16,14 +16,15 @@ class GetSolutionWizard(models.TransientModel):
 
     def confirm(self):
         if self.solution:
-            answers = eval(self.challenge_id.answers)
             solution = self.env['solution'].create({'name': self.solution})
-            for question_id in answers.keys():
-                self.env['answer'].create({
-                    'solution_id': solution.id,
-                    'question_id': question_id,
-                    'answer': answers[question_id]
-                })
+            if self.challenge_id.answers:
+                answers = eval(self.challenge_id.answers)
+                for question_id in answers.keys():
+                    self.env['answer'].create({
+                        'solution_id': solution.id,
+                        'question_id': question_id,
+                        'answer': answers[question_id]
+                    })
             if self.solution_question and self.solution_answer:
                 question = self.env['question'].create({'name': self.solution_question})
                 self.env['answer'].create({
@@ -39,6 +40,7 @@ class GetSolutionWizard(models.TransientModel):
                 'is_solution': True
             })
         self.challenge_id.start_over()
+
         return
 
     def skip(self):

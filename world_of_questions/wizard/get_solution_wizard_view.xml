@@ -5,24 +5,23 @@
             <field name="model">get.solution.wizard</field>
             <field name="arch" type="xml">
                 <form string="Get Solution">
-                    <div>
-                        What were you??????
+                    <div style="font-weight: bold">
+                        What were you?
                     </div>
-                    <field name="solution" nolable="1"/>
-                    <br/>
-                    <div>
-                        What's a question that I should have asked?'
+                    <field name="solution" nolable="1" style="width:50%%"/>
+                    <br/><br/>
+                    <div style="font-weight: bold">
+                        What's a question that I should have asked?
                     </div>
                     <field name="solution_question" nolable="1"/>
-                    <br/>
-                    <div>
-                        And the answer?'
+                    <br/><br/>
+                    <div style="font-weight: bold">
+                        And the answer?
                     </div>
-                    <field name="solution_answer" nolable="1"/>
-                    <br/>
+                    <field name="solution_answer" nolable="1" style="width:33%%"/>
+                    <br/><br/>
                     <footer>
-                        <button name="confirm" string="Confirm" type="object" class="btn-primary"/>
-                        <button name="skip" string="Skip" class="btn-secondary" type="object"/>
+                        <button name="confirm" string="Continue" type="object" class="btn-primary"/>
                     </footer>
                 </form>
             </field>

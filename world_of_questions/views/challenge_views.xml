@@ -13,10 +13,6 @@
         </div>
         <field name="state" invisible="1"/>
         <field name="question_is_possible_solution" invisible="1"/>
-        <field name="solution" nolabel="1" attrs="{'invisible': [('state', '!=', 'stumped')]}"/>
-        <field name="solution_question" attrs="{'invisible': [('state', '!=', 'stumped')]}"/>
-        <field name="solution_answer" attrs="{'invisible': [('state', '!=', 'stumped')]}"/>
-        <button string="Continue" style="width:33%%" name="get_solution" type="object" class="btn-primary" attrs="{'invisible': [('state', '!=', 'stumped')]}"/>
         <button string="You guessed it!" style="width:33%%" name="solution_found" type="object" class="btn-secondary" attrs="{'invisible': ['|', ('question_is_possible_solution', '=', False), ('state', 'in', ('ready', 'not playing', 'new', 'done', 'stumped'))]}"/>
         <br/><br/>
         <button string="Yes" style="width:33%%" name="yes_action" type="object" class="btn-primary" attrs="{'invisible': [('state', 'in', ('not playing', 'stumped'))]}"/>
