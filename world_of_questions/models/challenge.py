@@ -18,9 +18,15 @@ class Challenge(models.Model):
     asked_question_ids = fields.Many2many('question', 'challenge_asked_questions', 'cid', 'qid')
     possible_solutions = fields.Many2many('solution', 'challenge_possible_solutions', 'cid', 'sid')
     question_is_possible_solution = fields.Boolean()
+    answers = fields.Char()
+    solution = fields.Char()
+    solution_question = fields.Char()
+    solution_answer = fields.Selection([('yes', 'Yes'), ('no', 'No')], string='Yes/No')
 
-    # TODO: If reached 20 questions, message "lost" and ask for solution, then a question that would have been good to ask with the answer
-    # TODO: If guessed solution, capture any learned answers
+    # TODO: (wizard) If reached 20 questions, message "lost" and ask for solution, then a question that would have been good to ask with the answer
+    #   capture any learned answers
+    #   Check if solution provided already exists and capture new answers
+    # TODO: On 'you guessed it', check for any new answers for the solution and add them
     # TODO: Find/add data sources (e.g. reptile classifications, plant classifications, etc)
     def yes_action(self):
         if self.state in ('new', 'not playing', 'done'):
@@ -29,24 +35,20 @@ class Challenge(models.Model):
         elif self.state == 'ready':
             self.ask_next_question()
         elif self.state == 'ask':
-            self.eliminate_solutions('yes')
-            if not self.check_for_solution_question('yes'):
-                self.ask_next_question('yes')
+            return self.ask_next_question('yes')
 
     def no_action(self):
         if self.state in ('new', 'ready', 'done'):
             self.message = "OK, no problem. I'll be here when you're ready to play."
             self.state = 'not playing'
         elif self.state == 'ask':
-            self.eliminate_solutions('no')
-            if not self.check_for_solution_question('no'):
-                self.ask_next_question('no')
+            return self.ask_next_question('no')
 
     def kind_of_action(self):
-        self.ask_next_question()
+        return self.ask_next_question()
 
     def not_sure_action(self):
-        self.ask_next_question()
+        return self.ask_next_question()
 
     def start_over(self):
         self.state = 'new'
@@ -55,6 +57,10 @@ class Challenge(models.Model):
         self.asked_question_ids = [(5, 0, 0)]
         self.possible_solutions = self.env['solution'].search([])
         self.question_is_possible_solution = False
+        self.answers = None
+        self.solution = None
+        self.solution_question = None
+        self.solution_answer = None
 
     def eliminate_solutions(self, yes_or_no):
         remove = []
@@ -72,7 +78,7 @@ class Challenge(models.Model):
             questions = self.env['question'].search([], order='sequence asc')
         return questions
 
-    def check_for_solution_question(self, yes_or_no):
+    def check_for_solution_question(self):
         self.question_is_possible_solution = False
         if len(self.possible_solutions) == 1:
             answer = self.env['answer'].search([('solution_id', '=', self.possible_solutions[0].id), ('is_solution', '=', True)], limit=1)
@@ -81,9 +87,37 @@ class Challenge(models.Model):
                 return True
         return False
 
+    def capture_answer(self, yes_or_no):
+        answers = eval(self.answers) if self.answers else {}
+        answers[self.question_id.id] = yes_or_no
+        self.answers = str(answers)
+
+    def check_out_of_questions(self):
+        if self.asked_question_ids and len(self.asked_question_ids) >= 20:
+            self.state = 'stumped'
+            self.name = "You stumped me!"
+            self.message = "I'm out of questions! What were you?"
+            context = dict(self.env.context)
+            context['form_view_initial_mode'] = 'edit'
+            return {'type': 'ir.actions.act_window',
+                    'view_type': 'form',
+                    'view_mode': 'form',
+                    'res_model': 'challenge',
+                    'res_id': self.id,
+                    'context': context,
+                    }
+        return False
+
     def ask_next_question(self, yes_or_no=None):
+        out_of_questions = self.check_out_of_questions()
+        if out_of_questions:
+            return out_of_questions
         possible_solutions = []
         if yes_or_no:
+            self.capture_answer(yes_or_no)
+            self.eliminate_solutions(yes_or_no)
+            if self.check_for_solution_question():
+                return
             for solution in self.possible_solutions:
                 answer = self.env['answer'].search([('question_id', '=', self.question_id.id), ('solution_id', '=', solution.id), ('answer', '=', yes_or_no)], limit=1)
                 if answer.id:
@@ -148,10 +182,54 @@ class Challenge(models.Model):
             self.question_is_possible_solution = True
 
     def solution_found(self):
+        answers = eval(self.answers)
+        answer = self.env['answer'].search([('question_id', '=', self.question_id.id), ('is_solution', '=', 'yes')], limit=1)
+        solution = answer.solution_id
+        for question_id in answers.keys():
+            answer = self.env['answer'].search([('question_id', '=', question_id), ('solution_id', '=', solution.id)], limit=1)
+            if not answer.id:
+                self.env['answer'].create({
+                    'solution_id': solution.id,
+                    'question_id': question_id,
+                    'answer': answers[question_id]
+                })
+        self.start_over()
         self.state = 'done'
         self.name = "I knew it!"
         self.message = "Would you like to play again?"
-        self.asked_question_ids = [(5, 0, 0)]
-        self.possible_solutions = self.env['solution'].search([])
-        self.question_is_possible_solution = False
 
+    def get_solution(self):
+        if self.solution:
+            answers = eval(self.answers)
+            solution = self.env['solution'].create({'name': self.solution})
+            for question_id in answers.keys():
+                self.env['answer'].create({
+                    'solution_id': solution.id,
+                    'question_id': question_id,
+                    'answer': answers[question_id]
+                })
+            if self.solution_question and self.solution_answer:
+                question = self.env['question'].create({'name': self.solution_question})
+                self.env['answer'].create({
+                    'solution_id': solution.id,
+                    'question_id': question.id,
+                    'answer': self.solution_answer
+                })
+            question = self.env['question'].create({'name': 'Are you a {}'.format(self.solution)})
+            self.env['answer'].create({
+                'solution_id': solution.id,
+                'question_id': question.id,
+                'answer': 'yes',
+                'is_solution': True
+            })
+        self.start_over()
+        context = dict(self.env.context)
+        context['form_view_initial_mode'] = 'readonly'
+        return {
+            'type': 'ir.actions.act_window',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'challenge',
+            'res_id': self.id,
+            'context': context,
+        }
