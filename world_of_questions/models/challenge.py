@@ -20,11 +20,6 @@ class Challenge(models.Model):
     question_is_possible_solution = fields.Boolean()
     answers = fields.Char()
 
-    # TODO: strip leading "a", "an" from provided solution
-    # TODO: (wizard) If reached 20 questions, message "lost" and ask for solution, then a question that would have been good to ask with the answer
-    #   Check if question already exists and use it
-    #   Check if solution provided already exists and capture new answers
-    # TODO: On 'you guessed it', check for any new answers for the solution and add them
     # TODO: Handle questions that might be answered wrong (e.g. flower in captivity)
     # TODO: Find/add data sources (e.g. reptile classifications, plant classifications, etc)
     def yes_action(self):

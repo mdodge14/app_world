@@ -8,7 +8,7 @@
       <tree string="Answers" editable="bottom" >
         <field name="solution_id" />
         <field name="question_id" />
-        <field name="answer" />
+        <field name="answer" widget="radio"/>
         <field name="is_solution"/>
       </tree>
     </field>

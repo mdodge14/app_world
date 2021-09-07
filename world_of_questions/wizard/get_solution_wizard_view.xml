@@ -8,17 +8,30 @@
                     <div style="font-weight: bold">
                         What were you?
                     </div>
-                    <field name="solution" nolable="1" style="width:50%%"/>
+                    <field name="solution" nolabel="1" style="width:50%%"/>
+                    <br/><br/>
+                    <div style="font-weight: bold">
+                        What article should be used for that (if any)?
+                    </div>
+                    <div style="color: grey" >
+                        <span>e.g. Are you </span>
+                        <field name="article" nolabel="1" readonly="1" style="font-weight: bold" attrs="{'invisible': [('article', '=', 'none')]}"/>
+                        <span attrs="{'invisible': [('article', '=', 'none')]}" style="color: #00000000">_</span>
+                        <span attrs="{'invisible': [('solution_stripped', '!=', False)]}">______</span>
+                        <field name="solution_stripped" nolabel="1" attrs="{'invisible': [('solution_stripped', '=', False)]}"/>
+                        <span>?</span>
+                    </div>
+                    <field name="article" nolabel="1" widget="radio"/>
                     <br/><br/>
                     <div style="font-weight: bold">
                         What's a question that I should have asked?
                     </div>
-                    <field name="solution_question" nolable="1"/>
+                    <field name="solution_new_question" nolabel="1"/>
                     <br/><br/>
                     <div style="font-weight: bold">
                         And the answer?
                     </div>
-                    <field name="solution_answer" nolable="1" style="width:33%%"/>
+                    <field name="solution_answer" nolabel="1" style="width:33%%" widget="radio"/>
                     <br/><br/>
                     <footer>
                         <button name="confirm" string="Continue" type="object" class="btn-primary"/>
