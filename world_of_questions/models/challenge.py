@@ -93,19 +93,34 @@ class Challenge(models.Model):
         self.answers = str(answers)
 
     def check_out_of_questions(self):
-        if self.asked_question_ids and len(self.asked_question_ids) >= 20:
+        if self.asked_question_ids and len(self.asked_question_ids) >= 2:
             self.state = 'stumped'
-            self.name = "You stumped me!"
-            self.message = "I'm out of questions! What were you?"
-            context = dict(self.env.context)
-            context['form_view_initial_mode'] = 'edit'
-            return {'type': 'ir.actions.act_window',
-                    'view_type': 'form',
-                    'view_mode': 'form',
-                    'res_model': 'challenge',
-                    'res_id': self.id,
-                    'context': context,
-                    }
+            self.name = "I'm out of questions!"
+            self.message = "What were you?"
+            # context = dict(self.env.context)
+            # context['form_view_initial_mode'] = 'edit'
+            # return {'type': 'ir.actions.act_window',
+            #         'view_type': 'form',
+            #         'view_mode': 'form',
+            #         'res_model': 'challenge',
+            #         'res_id': self.id,
+            #         'context': context,
+            #         }
+            context = dict(
+                self.env.context,
+                default_challenge_id=self.id
+            )
+            return {
+                "name": "I'm out of questions!",
+                "type": "ir.actions.act_window",
+                "view_mode": "form",
+                "res_model": "get.solution.wizard",
+                'context': {'active_id': self.id},
+                "target": "new",
+                "binding_model_id": "challenge",
+                "binding_view_types": "form",
+                "context": context,
+            }
         return False
 
     def ask_next_question(self, yes_or_no=None):

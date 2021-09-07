@@ -4,7 +4,7 @@
 import logging
 import odoo
 from odoo.tools import config
-from . import models
+from . import models, wizard
 
 _logger = logging.getLogger(__name__)
 

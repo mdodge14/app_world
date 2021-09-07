@@ -17,6 +17,7 @@
         'views/question_views.xml',
         'views/solution_views.xml',
         'views/menu_views.xml',
+        'wizard/get_solution_wizard_view.xml'
     ],
     'development_status': 'Production/Stable',
     # 'pre_init_hook': 'pre_init_hook',

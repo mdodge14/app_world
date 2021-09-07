@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="get_solution_wizard_view" model="ir.ui.view">
+            <field name="name">get_solution_wizard_view</field>
+            <field name="model">get.solution.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Get Solution">
+                    <div>
+                        What were you??????
+                    </div>
+                    <field name="solution" nolable="1"/>
+                    <br/>
+                    <div>
+                        What's a question that I should have asked?'
+                    </div>
+                    <field name="solution_question" nolable="1"/>
+                    <br/>
+                    <div>
+                        And the answer?'
+                    </div>
+                    <field name="solution_answer" nolable="1"/>
+                    <br/>
+                    <footer>
+                        <button name="confirm" string="Confirm" type="object" class="btn-primary"/>
+                        <button name="skip" string="Skip" class="btn-secondary" type="object"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+</odoo>
