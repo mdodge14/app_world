@@ -93,7 +93,7 @@ class Challenge(models.Model):
         self.answers = str(answers)
 
     def check_out_of_questions(self):
-        if self.asked_question_ids and len(self.asked_question_ids) >= 2:
+        if self.asked_question_ids and len(self.asked_question_ids) >= 20:
             self.state = 'stumped'
             self.name = "I'm out of questions!"
             self.message = "What were you?"
