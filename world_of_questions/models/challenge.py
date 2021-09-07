@@ -19,11 +19,8 @@ class Challenge(models.Model):
     possible_solutions = fields.Many2many('solution', 'challenge_possible_solutions', 'cid', 'sid')
     question_is_possible_solution = fields.Boolean()
 
-    # TODO: Test/answer questions
-    # TODO: Kind of / Not sure buttons
-    # TODO: Kind of answer option
-    # TODO: If guessed solution, capture any learned answers
     # TODO: If reached 20 questions, message "lost" and ask for solution, then a question that would have been good to ask with the answer
+    # TODO: If guessed solution, capture any learned answers
     # TODO: Find/add data sources (e.g. reptile classifications, plant classifications, etc)
     def yes_action(self):
         if self.state in ('new', 'not playing', 'done'):
@@ -34,7 +31,7 @@ class Challenge(models.Model):
         elif self.state == 'ask':
             self.eliminate_solutions('yes')
             if not self.check_for_solution_question('yes'):
-                self.ask_next_question()
+                self.ask_next_question('yes')
 
     def no_action(self):
         if self.state in ('new', 'ready', 'done'):
@@ -43,7 +40,13 @@ class Challenge(models.Model):
         elif self.state == 'ask':
             self.eliminate_solutions('no')
             if not self.check_for_solution_question('no'):
-                self.ask_next_question()
+                self.ask_next_question('no')
+
+    def kind_of_action(self):
+        self.ask_next_question()
+
+    def not_sure_action(self):
+        self.ask_next_question()
 
     def start_over(self):
         self.state = 'new'
@@ -71,27 +74,35 @@ class Challenge(models.Model):
 
     def check_for_solution_question(self, yes_or_no):
         self.question_is_possible_solution = False
-        remaining_questions = self.get_remaining_questions()
         if len(self.possible_solutions) == 1:
             answer = self.env['answer'].search([('solution_id', '=', self.possible_solutions[0].id), ('is_solution', '=', True)], limit=1)
-            self.ask_question(answer.question_id)
-            return True
-        # for solution in self.possible_solutions:
-        #     answer = self.env['answer'].search([('question_id', '=', self.question_id.id), ('solution_id', '=', solution.id), ('answer', '=', yes_or_no)], limit=1)
-        #     if answer.id:
-        #         new_answer = self.env['answer'].search([('solution_id', '=', solution.id), ('question_id', 'in', remaining_questions.ids)], limit=1)
-        #         if new_answer.id:
-        #             self.ask_question(new_answer.question_id)
-        #             return True
+            if answer.id:
+                self.ask_question(answer.question_id)
+                return True
         return False
 
-    def ask_next_question(self):
+    def ask_next_question(self, yes_or_no=None):
+        possible_solutions = []
+        if yes_or_no:
+            for solution in self.possible_solutions:
+                answer = self.env['answer'].search([('question_id', '=', self.question_id.id), ('solution_id', '=', solution.id), ('answer', '=', yes_or_no)], limit=1)
+                if answer.id:
+                    possible_solutions.append(solution)
+        if len(possible_solutions) == 1:
+            answer = self.env['answer'].search([('solution_id', '=', possible_solutions[0].id), ('is_solution', '=', True)], limit=1)
+            if answer.id:
+                self.ask_question(answer.question_id)
+                return
+            else:
+                possible_solutions = self.possible_solutions
+        if len(possible_solutions) == 0:
+            possible_solutions = self.possible_solutions
         questions = self.get_remaining_questions()
         if len(questions) > 1:
             yes_answers = {}
             no_answers = {}
             for question in questions:
-                for solution in self.possible_solutions:
+                for solution in possible_solutions:
                     answer = self.env['answer'].search([('question_id', '=', question.id), ('solution_id', '=', solution.id)], limit=1)
                     if answer.id:
                         if answer.answer == 'yes':
