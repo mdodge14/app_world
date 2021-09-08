@@ -5,7 +5,8 @@
     <field name="name">solution_tree</field>
     <field name="model">solution</field>
     <field name="arch" type="xml">
-      <tree string="Solutions">
+      <tree string="Solutions" editable="bottom">
+        <field name="article" />
         <field name="name" />
       </tree>
     </field>

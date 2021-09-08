@@ -12,3 +12,4 @@ class Solution(models.Model):
     # _order = "name"
 
     name = fields.Char(index=True)
+    article = fields.Selection([('a', 'a'), ('an', 'an'), ('the', 'the')], default='a')

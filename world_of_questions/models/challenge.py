@@ -85,7 +85,6 @@ class Challenge(models.Model):
                 "type": "ir.actions.act_window",
                 "view_mode": "form",
                 "res_model": "get.solution.wizard",
-                'context': {'active_id': self.id},
                 "target": "new",
                 "binding_model_id": "challenge",
                 "binding_view_types": "form",

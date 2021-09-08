@@ -3,4 +3,5 @@ access_challenge,access_challenge,model_challenge,base.group_user,1,1,1,1
 access_solution,access_solution,model_solution,base.group_user,1,1,1,1
 access_question,access_question,model_question,base.group_user,1,1,1,1
 access_answer,access_answer,model_answer,base.group_user,1,1,1,1
+access_get_answers_wizard,access_get_answers_wizard,model_get_answers_wizard,base.group_user,1,1,1,1
 access_get_solution_wizard,access_get_solution_wizard,model_get_solution_wizard,base.group_user,1,1,1,1

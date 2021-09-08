@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="get_answers_wizard_view" model="ir.ui.view">
+            <field name="name">get_answers_wizard_view</field>
+            <field name="model">get.answers.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Get Answers">
+                    <field name="question_id" invisible="1"/>
+                    <field name="solution_id" invisible="1"/>
+                    <div style="font-weight: bold">How would you answer</div>
+                    <span style="margin-left:5px;">"<field name="question" nolabel="1"/>?"</span>
+                    <div style="font-weight: bold">for:</div>
+                    <br/>
+                    <div>
+                        <field name="solution1" nolabel="1" style="width:50%%" attrs="{'invisible': [('solution1', '=', False)]}"/>
+                        <field name="answer1" nolabel="1" style="width:50%%" attrs="{'invisible': [('solution1', '=', False)]}"/>
+                    </div>
+                    <div>
+                        <field name="solution2" nolabel="1" style="width:50%%" attrs="{'invisible': [('solution2', '=', False)]}"/>
+                        <field name="answer2" nolabel="1" style="width:50%%" attrs="{'invisible': [('solution2', '=', False)]}"/>
+                    </div>
+                    <div>
+                        <field name="solution3" nolabel="1" style="width:50%%" attrs="{'invisible': [('solution3', '=', False)]}"/>
+                        <field name="answer3" nolabel="1" style="width:50%%" attrs="{'invisible': [('solution3', '=', False)]}"/>
+                    </div>
+                    <div>
+                        <field name="solution4" nolabel="1" style="width:50%%" attrs="{'invisible': [('solution4', '=', False)]}"/>
+                        <field name="answer4" nolabel="1" style="width:50%%" attrs="{'invisible': [('solution4', '=', False)]}"/>
+                    </div>
+                    <div>
+                        <field name="solution5" nolabel="1" style="width:50%%" attrs="{'invisible': [('solution5', '=', False)]}"/>
+                        <field name="answer5" nolabel="1" style="width:50%%" attrs="{'invisible': [('solution5', '=', False)]}"/>
+                    </div>
+                    <br/><br/>
+                    <footer>
+                        <button name="confirm" string="Continue" type="object" class="btn-primary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+</odoo>
