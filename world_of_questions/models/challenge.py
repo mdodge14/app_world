@@ -41,7 +41,10 @@ class Challenge(models.Model):
             return self.ask_next_question('no')
 
     def kind_of_action(self):
-        return self.ask_next_question()
+        return self.ask_next_question('kindof')
+
+    def sometimes_action(self):
+        return self.ask_next_question('sometimes')
 
     def not_sure_action(self):
         return self.ask_next_question()
@@ -55,11 +58,13 @@ class Challenge(models.Model):
         self.question_is_possible_solution = False
         self.answers = None
 
-    def eliminate_solutions(self, yes_or_no):
+    def eliminate_solutions(self, answer_str):
+        if answer_str in ('kind of', 'sometimes'):
+            return
         remove = []
         for solution in self.possible_solutions:
             answer = self.env['answer'].search([('question_id', '=', self.question_id.id), ('solution_id', '=', solution.id)], limit=1)
-            if answer.id and answer.answer != yes_or_no:
+            if answer.id and answer.answer != answer_str:
                 remove.append(solution.id)
         for r in remove:
             self.possible_solutions = [(3, r, 0)]
@@ -94,26 +99,26 @@ class Challenge(models.Model):
             }
         return False
 
-    def ask_next_question(self, yes_or_no=None):
+    def ask_next_question(self, answer_str=None):
         possible_solutions = []
-        if yes_or_no:
-            self.capture_answer(yes_or_no)
-            self.eliminate_solutions(yes_or_no)
+        if answer_str:
+            self.capture_answer(answer_str)
+            self.eliminate_solutions(answer_str)
         out_of_questions = self.check_out_of_questions()
         if out_of_questions:
             return out_of_questions
-        if yes_or_no:
+        if answer_str:
             for solution in self.possible_solutions:
-                answer = self.env['answer'].search([('question_id', '=', self.question_id.id), ('solution_id', '=', solution.id), ('answer', '=', yes_or_no)], limit=1)
-                if answer.id:
+                answer = self.env['answer'].search([('question_id', '=', self.question_id.id), ('solution_id', '=', solution.id)], limit=1)
+                if answer.id and (answer.answer == answer_str or answer_str in ('kindof', 'sometimes') or answer.answer in ('kindof', 'sometimes')):
                     possible_solutions.append(solution)
-        if len(possible_solutions) == 0 and yes_or_no == 'no':
+        if len(possible_solutions) == 0 and answer_str == 'no':
             answers = eval(self.answers) if self.answers else {}
             for solution in self.possible_solutions:
                 add_solution = True
                 for question_id in answers:
-                    if answers[question_id] == 'yes':
-                        answer = self.env['answer'].search([('question_id', '=', question_id), ('solution_id', '=', solution.id), ('answer', '=', 'yes')], limit=1)
+                    if answers[question_id] in ('yes', 'kindof', 'sometimes'):
+                        answer = self.env['answer'].search([('question_id', '=', question_id), ('solution_id', '=', solution.id), ('answer', 'in', ('yes', 'kindof', 'sometimes'))], limit=1)
                         if not answer.id:
                             add_solution = False
                             break

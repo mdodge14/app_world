@@ -11,6 +11,7 @@
                 <field name="message"/>
             </h2>
         </div>
+        <div style="margin: auto; text-align: center;">
         <field name="state" invisible="1"/>
         <field name="question_is_possible_solution" invisible="1"/>
         <button string="You guessed it!" style="width:33%%" name="solution_found" type="object" class="btn-secondary" attrs="{'invisible': ['|', ('question_is_possible_solution', '=', False), ('state', 'in', ('ready', 'not playing', 'new', 'done', 'stumped'))]}"/>
@@ -18,11 +19,14 @@
         <button string="Yes" style="width:33%%" name="yes_action" type="object" class="btn-primary" attrs="{'invisible': [('state', 'in', ('not playing', 'stumped'))]}"/>
         <button string="No" style="width:33%%" name="no_action" type="object" class="btn-secondary" attrs="{'invisible': [('state', 'in', ('not playing', 'stumped'))]}"/>
         <button string="Ready to play" style="width:33%%" name="yes_action" type="object" class="btn-primary" attrs="{'invisible': [('state', '!=', 'not playing')]}"/>
-        <br/><br/>
+        <br attrs="{'invisible': [('state', 'in', ('ready', 'not playing', 'new', 'done', 'stumped'))]}"/><br attrs="{'invisible': [('state', 'in', ('ready', 'not playing', 'new', 'done', 'stumped'))]}"/>
+        <button string="Sometimes" style="width:33%%" name="sometimes_action" type="object" class="btn-secondary" attrs="{'invisible': [('state', 'in', ('ready', 'not playing', 'new', 'done', 'stumped'))]}"/>
         <button string="Kind of" style="width:33%%" name="kind_of_action" type="object" class="btn-secondary" attrs="{'invisible': [('state', 'in', ('ready', 'not playing', 'new', 'done', 'stumped'))]}"/>
-        <button string="I'm not sure" style="width:33%%" name="not_sure_action" type="object" class="btn-secondary" attrs="{'invisible': [('state', 'in', ('ready', 'not playing', 'new', 'done', 'stumped'))]}"/>
+        <br attrs="{'invisible': [('state', 'in', ('ready', 'not playing', 'new', 'done', 'stumped'))]}"/><br attrs="{'invisible': [('state', 'in', ('ready', 'not playing', 'new', 'done', 'stumped'))]}"/>
+        <button string="I'm not sure" style="width:66%%" name="not_sure_action" type="object" class="btn-secondary" attrs="{'invisible': [('state', 'in', ('ready', 'not playing', 'new', 'done', 'stumped'))]}"/>
         <br/><br/>
-        <button string="Start over" name="start_over" type="object" class="btn-link"/>
+        <button string="Start over" style="width:66%%" name="start_over" type="object" class="btn-link"/>
+        </div>
       </form>
     </field>
   </record>

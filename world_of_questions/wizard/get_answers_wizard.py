@@ -18,11 +18,11 @@ class GetAnswersWizard(models.TransientModel):
     solution3 = fields.Char('solution', compute='compute_solutions')
     solution4 = fields.Char('solution', compute='compute_solutions')
     solution5 = fields.Char('solution', compute='compute_solutions')
-    answer1 = fields.Selection([('yes', 'Yes'), ('no', 'No')])
-    answer2 = fields.Selection([('yes', 'Yes'), ('no', 'No')])
-    answer3 = fields.Selection([('yes', 'Yes'), ('no', 'No')])
-    answer4 = fields.Selection([('yes', 'Yes'), ('no', 'No')])
-    answer5 = fields.Selection([('yes', 'Yes'), ('no', 'No')])
+    answer1 = fields.Selection([('yes', 'Yes'), ('no', 'No'), ('sometimes', 'Sometimes'), ('kindof', 'Kind of')])
+    answer2 = fields.Selection([('yes', 'Yes'), ('no', 'No'), ('sometimes', 'Sometimes'), ('kindof', 'Kind of')])
+    answer3 = fields.Selection([('yes', 'Yes'), ('no', 'No'), ('sometimes', 'Sometimes'), ('kindof', 'Kind of')])
+    answer4 = fields.Selection([('yes', 'Yes'), ('no', 'No'), ('sometimes', 'Sometimes'), ('kindof', 'Kind of')])
+    answer5 = fields.Selection([('yes', 'Yes'), ('no', 'No'), ('sometimes', 'Sometimes'), ('kindof', 'Kind of')])
 
     @api.depends('question_id', 'solution_id', 'challenge_id')
     def compute_solutions(self):
