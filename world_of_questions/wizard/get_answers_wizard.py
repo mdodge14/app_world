@@ -33,7 +33,11 @@ class GetAnswersWizard(models.TransientModel):
         self.solution5 = None
         self.question = self.question_id.name
         if self.challenge_id.id and self.question_id.id and self.challenge_id.answers:
-            possible_solutions = self.env['solution'].search([('id', '!=', self.solution_id.id)])
+            answered_solution_ids = []
+            existing_answers = self.env['answer'].search([('question_id', '=', self.question_id.id)])
+            for existing_answer in existing_answers:
+                answered_solution_ids.append(existing_answer.solution_id.id)
+            possible_solutions = self.env['solution'].search([('id', 'not in', answered_solution_ids)])
             possible_solution_ids = possible_solutions.ids
             answers = eval(self.challenge_id.answers) if self.challenge_id.answers else {}
             for question_id in answers:
