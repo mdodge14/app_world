@@ -64,7 +64,7 @@ class Challenge(models.Model):
         remove = []
         for solution in self.possible_solutions:
             answer = self.env['answer'].search([('question_id', '=', self.question_id.id), ('solution_id', '=', solution.id)], limit=1)
-            if answer.id and answer.answer != answer_str:
+            if answer.id and answer.answer != answer_str and answer.answer not in ('kind of', 'sometimes'):
                 remove.append(solution.id)
         for r in remove:
             self.possible_solutions = [(3, r, 0)]
@@ -110,7 +110,7 @@ class Challenge(models.Model):
         if answer_str:
             for solution in self.possible_solutions:
                 answer = self.env['answer'].search([('question_id', '=', self.question_id.id), ('solution_id', '=', solution.id)], limit=1)
-                if answer.id and (answer.answer == answer_str or answer_str in ('kindof', 'sometimes') or answer.answer in ('kindof', 'sometimes')):
+                if answer.id and (answer.answer == answer_str):  # or answer_str in ('kindof', 'sometimes') or answer.answer in ('kindof', 'sometimes')):
                     possible_solutions.append(solution)
         if len(possible_solutions) == 0 and answer_str == 'no':
             answers = eval(self.answers) if self.answers else {}
