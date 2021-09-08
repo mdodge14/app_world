@@ -20,6 +20,8 @@ class Challenge(models.Model):
     question_is_possible_solution = fields.Boolean()
     answers = fields.Char()
 
+    # TODO: Don't ask solution question if > 1 possible question to ask
+    # TODO: When entering solution if article is 'a' or 'an' and solution changes, correct article to 'a'/'an'
     # TODO: Handle questions that might be answered wrong (e.g. flower in captivity)
     # TODO: Find/add data sources (e.g. reptile classifications, plant classifications, etc)
     def yes_action(self):
