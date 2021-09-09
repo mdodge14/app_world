@@ -50,4 +50,13 @@ class Answer(models.Model):
                     answer = self.env['answer'].search([('solution_id', '=', res.solution_id.id), ('question_id', '=', question.id)], limit=1)
                     if not answer.id:
                         self.env['answer'].create({'solution_id': res.solution_id.id, 'question_id': question.id, 'answer': 'yes'})
+        if res.solution_id.id:
+            res.solution_id.compute_yes_answers()
+        return res
+
+    @api.model
+    def write(self, vals):
+        res = super(Answer, self).write(vals)
+        if res.solution_id.id:
+            res.solution_id.compute_yes_answers()
         return res

@@ -15,6 +15,7 @@
           <field name="article" />
           <field name="questions_to_solution" />
           <field name="question_chain" />
+          <field name="yes_answers" />
           <button string="Add Answer" name="add_answer" type="object" colspan="2"/>
           <field name="solution_answers" nolabel="1" colspan="2">
             <tree editable="bottom" create="false">
@@ -37,7 +38,18 @@
         <field name="name" />
         <field name="questions_to_solution" />
         <field name="question_chain" />
+        <field name="yes_answers" />
       </tree>
+    </field>
+  </record>
+
+  <record model='ir.ui.view' id='solution_search'>
+    <field name="name">solution_search</field>
+    <field name="model">solution</field>
+    <field name="arch" type="xml">
+      <search string="Solution" >
+        <field name="name" string="Name/Yes Answers" filter_domain="['|', ('name', 'ilike', self), ('yes_answers', 'ilike', self)]"/>
+      </search>
     </field>
   </record>
 
@@ -60,6 +72,17 @@
     <field name="code">
   if records:
       action = records.compute_question_chain()
+    </field>
+  </record>
+
+  <record model="ir.actions.server" id="action_compute_yes_answers">
+    <field name="name">Compute yes answers</field>
+    <field name="model_id" ref="model_solution"/>
+      <field name="binding_model_id" ref="model_solution" />
+    <field name="state">code</field>
+    <field name="code">
+  if records:
+      action = records.compute_yes_answers()
     </field>
   </record>
 

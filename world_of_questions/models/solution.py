@@ -16,6 +16,14 @@ class Solution(models.Model):
     questions_to_solution = fields.Integer(readonly=True)
     question_chain = fields.Text(readonly=True)
     solution_answers = fields.One2many('answer', 'solution_id')
+    yes_answers = fields.Text(readonly=True)
+
+    def compute_yes_answers(self):
+        for rec in self:
+            rec.yes_answers = ""
+            yes_answers = self.env['answer'].search([('solution_id', '=', rec.id), ('answer', '=', 'yes')])
+            for answer in yes_answers:
+                rec.yes_answers += "{}: {}\n".format(answer.question_id.name, answer.answer)
 
     def compute_question_chain(self):
         i = 1
