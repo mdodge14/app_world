@@ -57,6 +57,7 @@ class Answer(models.Model):
     @api.model
     def write(self, vals):
         res = super(Answer, self).write(vals)
-        if res.solution_id.id:
-            res.solution_id.compute_yes_answers()
+        for rec in self:
+            if rec.solution_id.id:
+                rec.solution_id.compute_yes_answers()
         return res
