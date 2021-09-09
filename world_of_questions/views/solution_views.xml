@@ -8,6 +8,8 @@
       <tree string="Solutions" editable="bottom">
         <field name="article" />
         <field name="name" />
+        <field name="questions_to_solution" />
+        <field name="question_chain" />
       </tree>
     </field>
   </record>
@@ -20,6 +22,17 @@
       <p class="oe_view_nocontent_create">
         Click to add a new solution.
       </p>
+    </field>
+  </record>
+
+  <record model="ir.actions.server" id="action_get_solution_question_chain">
+    <field name="name">Get question chain</field>
+    <field name="model_id" ref="model_solution"/>
+      <field name="binding_model_id" ref="model_solution" />
+    <field name="state">code</field>
+    <field name="code">
+  if records:
+      action = records.compute_question_chain()
     </field>
   </record>
 

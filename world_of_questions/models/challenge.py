@@ -21,6 +21,8 @@ class Challenge(models.Model):
     answers = fields.Char()
     debug = fields.Text()
 
+    # TODO: Capture new solutions that would be answered 'yes' for new question
+    # TODO: Test solutions (show #Qs to guess, and which Q&As)
     # TODO: Handle questions that might be answered wrong (e.g. flower in captivity)
     # TODO: Find/add data sources (e.g. reptile classifications, plant classifications, etc)
     def yes_action(self):
@@ -100,6 +102,9 @@ class Challenge(models.Model):
         return False
 
     def ask_next_question(self, answer_str=None):
+        if len(self.asked_question_ids) == 0:
+            question = self.env['question'].search([('name', '=', 'Are you a living thing')], limit=1)
+            return self.ask_question(question)
         possible_solutions = []
         if answer_str:
             self.capture_answer(answer_str)
@@ -130,12 +135,14 @@ class Challenge(models.Model):
                 if add_solution:
                     possible_solutions.append(solution)
             self.debug += "{} matches for previous answers.\n".format(len(possible_solutions))
+        self.debug += "Possible solutions filtered:     "
+        for solution in possible_solutions:
+            self.debug += solution.name + ", "
+        self.debug += "\nPossible solutions unfiltered: "
+        for solution in self.possible_solutions:
+            self.debug += solution.name + ", "
         if len(possible_solutions) == 0:
             possible_solutions = self.possible_solutions
-        else:
-            self.debug += "Possible solutions: "
-            for solution in possible_solutions:
-                self.debug += solution.name + ", "
         if len(possible_solutions) == 1:
             answer = self.env['answer'].search([('solution_id', '=', possible_solutions[0].id), ('is_solution', '=', True)], limit=1)
             if answer.id:
@@ -143,6 +150,12 @@ class Challenge(models.Model):
                 return
             else:
                 possible_solutions = self.possible_solutions
+        if len(self.asked_question_ids) == 1:
+            if self.answers and list(answers.values())[0] == 'yes':
+                question = self.env['question'].search([('name', '=', 'Are you a person')], limit=1)
+            else:
+                question = self.env['question'].search([('name', '=', 'Are you man made')], limit=1)
+            return self.ask_question(question)
         questions = self.get_remaining_questions()
         if len(questions) > 1:
             yes_answers = {}
