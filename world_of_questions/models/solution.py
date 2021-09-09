@@ -93,7 +93,8 @@ class Solution(models.Model):
     def add_answer(self):
         context = dict(
             self.env.context,
-            default_solution_id=self.id
+            default_solution_id=self.id,
+            default_for_solution=True
         )
         return {
             "name": "Add Answer",
@@ -101,7 +102,6 @@ class Solution(models.Model):
             "view_mode": "form",
             "res_model": "add.solution.answer.wizard",
             "target": "new",
-            "binding_model_id": "solution",
             "binding_view_types": "form",
             "context": context,
         }

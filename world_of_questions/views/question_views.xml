@@ -12,6 +12,8 @@
           </h1>
         </div>
         <group>
+          <field name="solution_answers" widget="many2many_tags"/>
+          <button string="Add Answer" name="add_answer" type="object"/>
           <field name="correlated_yes_yes_questions" widget="many2many_tags" string="If yes, then also yes" />
           <field name="correlated_yes_no_questions" widget="many2many_tags" string="If yes, then also no" />
           <field name="correlated_no_no_questions" widget="many2many_tags" string="If no, then also no" />

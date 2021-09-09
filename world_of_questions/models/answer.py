@@ -23,7 +23,7 @@ class Answer(models.Model):
         for rec in self:
             rec.name = ""
             if rec.question_id.name and rec.answer:
-                rec.name = "{}? {}".format(rec.question_id.name, rec.answer)
+                rec.name = "{}: {}? {}".format(rec.solution_id.name, rec.question_id.name, rec.answer)
 
     @api.model
     def create(self, vals):

@@ -13,6 +13,7 @@ class Question(models.Model):
     _order = "name"
 
     name = fields.Char(index=True, string='Question')
+    solution_answers = fields.One2many('answer', 'question_id')
     correlated_yes_yes_questions = fields.Many2many('question', 'correlated_yes_yes_questions', 'if_id', 'then_id')
     correlated_yes_no_questions = fields.Many2many('question', 'correlated_yes_no_questions', 'if_id', 'then_id')
     correlated_no_no_questions = fields.Many2many('question', 'correlated_no_no_questions', 'if_id', 'then_id')
@@ -49,3 +50,19 @@ class Question(models.Model):
                         if not answer.id:
                             self.env['answer'].create({'solution_id': question_answer.solution_id.id, 'question_id': question.id, 'answer': 'yes'})
                             self.debug += "{} - {}? {}\n".format(question_answer.solution_id.name, question.name, 'yes')
+
+    def add_answer(self):
+        context = dict(
+            self.env.context,
+            default_question_id=self.id,
+            default_for_solution=False
+        )
+        return {
+            "name": "Add Answer",
+            "type": "ir.actions.act_window",
+            "view_mode": "form",
+            "res_model": "add.solution.answer.wizard",
+            "target": "new",
+            "binding_view_types": "form",
+            "context": context,
+        }

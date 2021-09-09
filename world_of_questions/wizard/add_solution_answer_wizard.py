@@ -9,12 +9,13 @@ class AddSolutionAnswerWizard(models.TransientModel):
     _name = 'add.solution.answer.wizard'
     _description = 'Add Solution Answer Wizard'
 
+    for_solution = fields.Boolean()
     solution_id = fields.Many2one('solution')
     question_id = fields.Many2one('question')
     answer = fields.Selection([('yes', 'Yes'), ('no', 'No'), ('sometimes', 'Sometimes'), ('kindof', 'Kind of')])
 
     def confirm(self):
-        if self.question_id.name and self.answer:
+        if self.solution_id.name and self.question_id.name and self.answer:
             answer = self.env['answer'].search([('question_id', '=', self.question_id.id), ('solution_id', '=', self.solution_id.id)], limit=1)
             if answer.id:
                 answer.answer = self.answer
