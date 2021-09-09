@@ -21,6 +21,8 @@ class Challenge(models.Model):
     answers = fields.Char()
     debug = fields.Text()
 
+    # TODO: Categorize solutions and update starting screen to show "the categories I can guess from"
+    #       Animals, U.S. States, Make Believe Creatures, Boston Celtics Players, Household Items
     # TODO: Capture new solutions that would be answered 'yes' for new question
     # TODO: Speed up computing question chain
     # TODO: Handle questions that might be answered wrong (e.g. flower in captivity)
