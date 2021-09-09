@@ -21,12 +21,11 @@ class Challenge(models.Model):
     answers = fields.Char()
     debug = fields.Text()
 
-    # TODO: on solution create, add is_solution question
-    # TODO: remove answers not in question chain
     # TODO: Capture new solutions that would be answered 'yes' for new question
     # TODO: Speed up computing question chain
     # TODO: Handle questions that might be answered wrong (e.g. flower in captivity)
     # TODO: Find/add data sources (e.g. reptile classifications, plant classifications, etc)
+    # TODO: remove answers not in question chain? But they might be useful later with more data
     def yes_action(self):
         if self.state in ('new', 'not playing', 'done'):
             self.message = "Great! I'll be the guesser. Do you know what you are?"
