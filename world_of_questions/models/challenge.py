@@ -21,8 +21,10 @@ class Challenge(models.Model):
     answers = fields.Char()
     debug = fields.Text()
 
+    # TODO: remove answers not in question chain
+    # TODO: question.run_correlations
     # TODO: Capture new solutions that would be answered 'yes' for new question
-    # TODO: Test solutions (show #Qs to guess, and which Q&As)
+    # TODO: Speed up computing question chain
     # TODO: Handle questions that might be answered wrong (e.g. flower in captivity)
     # TODO: Find/add data sources (e.g. reptile classifications, plant classifications, etc)
     def yes_action(self):
@@ -73,9 +75,9 @@ class Challenge(models.Model):
 
     def get_remaining_questions(self):
         if self.asked_question_ids:
-            questions = self.env['question'].search([('id', 'not in', self.asked_question_ids.ids)], order='sequence asc')
+            questions = self.env['question'].search([('id', 'not in', self.asked_question_ids.ids)])
         else:
-            questions = self.env['question'].search([], order='sequence asc')
+            questions = self.env['question'].search([])
         return questions
 
     def capture_answer(self, yes_or_no):

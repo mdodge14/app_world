@@ -16,3 +16,30 @@ class Answer(models.Model):
     question_id = fields.Many2one('question', string='Question')
     answer = fields.Selection([('yes', 'Yes'), ('no', 'No'), ('sometimes', 'Sometimes'), ('kindof', 'Kind of')], string='Answer')
     is_solution = fields.Boolean()
+
+    @api.model
+    def create(self, vals):
+        res = super(Answer, self).create(vals)
+        if res.answer == 'yes' and res.solution_id.id and res.question_id.id:
+            if res.question_id.correlated_yes_yes_questions:
+                for question in res.question_id.correlated_yes_yes_questions:
+                    answer = self.env['answer'].search([('solution_id', '=', res.solution_id.id), ('question_id', '=', question.id)], limit=1)
+                    if not answer.id:
+                        self.env['answer'].create({'solution_id': res.solution_id.id, 'question_id': question.id, 'answer': 'yes'})
+            if res.question_id.correlated_yes_no_questions:
+                for question in res.question_id.correlated_yes_no_questions:
+                    answer = self.env['answer'].search([('solution_id', '=', res.solution_id.id), ('question_id', '=', question.id)], limit=1)
+                    if not answer.id:
+                        self.env['answer'].create({'solution_id': res.solution_id.id, 'question_id': question.id, 'answer': 'no'})
+        elif res.answer == 'no' and res.solution_id.id and res.question_id.id:
+            if res.question_id.correlated_no_no_questions:
+                for question in res.question_id.correlated_no_no_questions:
+                    answer = self.env['answer'].search([('solution_id', '=', res.solution_id.id), ('question_id', '=', question.id)], limit=1)
+                    if not answer.id:
+                        self.env['answer'].create({'solution_id': res.solution_id.id, 'question_id': question.id, 'answer': 'no'})
+            if res.question_id.correlated_no_yes_questions:
+                for question in res.question_id.correlated_no_yes_questions:
+                    answer = self.env['answer'].search([('solution_id', '=', res.solution_id.id), ('question_id', '=', question.id)], limit=1)
+                    if not answer.id:
+                        self.env['answer'].create({'solution_id': res.solution_id.id, 'question_id': question.id, 'answer': 'yes'})
+        return res

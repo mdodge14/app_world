@@ -1,12 +1,31 @@
 <?xml version="1.0"?>
 <odoo>
 
+  <record model='ir.ui.view' id='question_form'>
+    <field name="name">question_form</field>
+    <field name="model">question</field>
+    <field name="arch" type="xml">
+      <form string="Question">
+        <div class="oe_title">
+          <h1>
+            <field name="name" placeholder="Name"/>
+          </h1>
+        </div>
+        <group>
+          <field name="correlated_yes_yes_questions" widget="many2many_tags" string="If yes, then also yes" />
+          <field name="correlated_yes_no_questions" widget="many2many_tags" string="If yes, then also no" />
+          <field name="correlated_no_no_questions" widget="many2many_tags" string="If no, then also no" />
+          <field name="correlated_no_yes_questions" widget="many2many_tags" string="If no, then also yes" />
+        </group>
+      </form>
+    </field>
+  </record>
+
   <record model='ir.ui.view' id='question_tree'>
     <field name="name">question_tree</field>
     <field name="model">question</field>
     <field name="arch" type="xml">
       <tree string="Questions">
-        <field name="sequence" widget="handle"/>
         <field name="name" />
       </tree>
     </field>
