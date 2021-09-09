@@ -13,6 +13,7 @@
                     </group>
                     <footer>
                         <button name="confirm" string="Add" type="object" class="btn-primary"/>
+                        <button name="confirm_add" string="Add and next" type="object" class="btn-secondary"/>
                         <button name="cancel" string="Cancel" type="object" class="btn-secondary" special="cancel"/>
                     </footer>
                 </form>

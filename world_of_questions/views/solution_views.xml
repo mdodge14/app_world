@@ -13,10 +13,16 @@
         </div>
         <group>
           <field name="article" />
-          <field name="solution_answers" widget="many2many_tags"/>
-          <button string="Add Answer" name="add_answer" type="object"/>
           <field name="questions_to_solution" />
           <field name="question_chain" />
+          <button string="Add Answer" name="add_answer" type="object" colspan="2"/>
+          <field name="solution_answers" nolabel="1" colspan="2">
+            <tree editable="bottom" create="false">
+              <field name="question_id" />
+              <field name="answer"/>
+              <field name="is_solution"/>
+            </tree>
+          </field>
         </group>
       </form>
     </field>

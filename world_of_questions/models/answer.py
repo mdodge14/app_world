@@ -10,7 +10,7 @@ _logger = logging.getLogger(__name__)
 class Answer(models.Model):
     _name = "answer"
     _description = "Answer"
-    # _order = "name"
+    _order = "is_solution desc, answer desc, name"
 
     name = fields.Char(compute='compute_name')
     solution_id = fields.Many2one('solution', string='Solution')

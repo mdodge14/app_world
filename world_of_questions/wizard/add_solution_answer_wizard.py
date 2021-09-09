@@ -26,3 +26,21 @@ class AddSolutionAnswerWizard(models.TransientModel):
                     'answer': self.answer
                 })
             return
+
+    def confirm_add(self):
+        self.confirm()
+        context = dict(
+            self.env.context,
+            default_solution_id=self.solution_id.id if self.for_solution else None,
+            default_question_id=self.question_id.id if not self.for_solution else None,
+            default_for_solution=self.for_solution
+        )
+        return {
+            "name": "Add Answer",
+            "type": "ir.actions.act_window",
+            "view_mode": "form",
+            "res_model": "add.solution.answer.wizard",
+            "target": "new",
+            "binding_view_types": "form",
+            "context": context,
+        }

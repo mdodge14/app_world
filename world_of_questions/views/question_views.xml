@@ -12,15 +12,22 @@
           </h1>
         </div>
         <group>
-          <field name="solution_answers" widget="many2many_tags"/>
-          <button string="Add Answer" name="add_answer" type="object"/>
           <field name="correlated_yes_yes_questions" widget="many2many_tags" string="If yes, then also yes" />
           <field name="correlated_yes_no_questions" widget="many2many_tags" string="If yes, then also no" />
           <field name="correlated_no_no_questions" widget="many2many_tags" string="If no, then also no" />
           <field name="correlated_no_yes_questions" widget="many2many_tags" string="If no, then also yes" />
-          <button string="Run Correlations" name="run_correlations" type="object"/>
+          <button string="Run Correlations" name="run_correlations" type="object" colspan="2"/>
+          <br/>
+          <field name="debug" nolabel="1" colspan="2"/>
           <br/><br/>
-          <field name="debug" nolabel="1"/>
+          <button string="Add Answer" name="add_answer" type="object" colspan="2"/>
+          <field name="solution_answers" nolabel="1" colspan="2">
+            <tree editable="bottom" create="false">
+              <field name="solution_id" />
+              <field name="answer"/>
+              <field name="is_solution"/>
+            </tree>
+          </field>
         </group>
       </form>
     </field>
