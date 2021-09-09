@@ -49,3 +49,42 @@ class Solution(models.Model):
                 challenge.not_sure_action()
         self.questions_to_solution = len(challenge.asked_question_ids)
         challenge.unlink()
+
+    def compute_solution_stripped(self, solution_name):
+        solution_stripped = solution_name.title()
+        if solution_stripped[0:2].lower() == 'a ':
+            solution_stripped = solution_stripped[2:].lower()
+        elif solution_stripped[0:3].lower() == 'an ':
+            solution_stripped = solution_stripped[3:].lower()
+        elif solution_stripped[0:4].lower() == 'the ':
+            solution_stripped = solution_stripped[4:]
+        return solution_stripped
+
+    def compute_article(self, solution_stripped, article):
+        if article == 'a' and solution_stripped[0].lower() in ('a', 'e', 'i', 'o', 'u'):
+            article == 'an'
+        elif article == 'an' and solution_stripped[0].lower() not in ('a', 'e', 'i', 'o', 'u'):
+            article == 'a'
+        return article
+
+    def compute_solution_question(self, solution_stripped, article):
+        return 'Are you {}{}'.format(article + ' ' if article else '', solution_stripped)
+
+    @api.model
+    def create(self, vals):
+        res = super(Solution, self).create(vals)
+        solution_stripped = res.compute_solution_stripped(res.name)
+        res.article = res.compute_article(solution_stripped, res.article)
+        solution_question_text = res.compute_solution_question(solution_stripped, res.article)
+        solution_question = self.env['question'].search([('name', 'ilike', solution_question_text)], limit=1)
+        if not solution_question.id:
+            solution_question = self.env['question'].create({'name': solution_question_text})
+        answer = self.env['answer'].search([('question_id', '=', solution_question.id), ('solution_id', '=', res.id)], limit=1)
+        if not answer.id:
+            self.env['answer'].create({
+                'solution_id': res.id,
+                'question_id': solution_question.id,
+                'answer': 'yes',
+                'is_solution': True
+            })
+        return res

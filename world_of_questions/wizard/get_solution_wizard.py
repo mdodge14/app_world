@@ -22,19 +22,9 @@ class GetSolutionWizard(models.TransientModel):
         self.solution_question = None
         self.solution_stripped = None
         if self.solution:
-            self.solution_stripped = self.solution.title()
-            if self.solution_stripped[0:2].lower() == 'a ':
-                self.solution_stripped = self.solution_stripped[2:].lower()
-            elif self.solution_stripped[0:3].lower() == 'an ':
-                self.solution_stripped = self.solution_stripped[3:].lower()
-            elif self.solution_stripped[0:4].lower() == 'the ':
-                self.solution_stripped = self.solution_stripped[4:]
-            if self.article == 'a' and self.solution_stripped[0].lower() in ('a', 'e', 'i', 'o', 'u'):
-                self.article == 'an'
-            elif self.article == 'an' and self.solution_stripped[0].lower() not in ('a', 'e', 'i', 'o', 'u'):
-                self.article == 'a'
-            article_text = self.article + ' ' if self.article else ''
-            self.solution_question = 'Are you {}{}'.format(article_text, self.solution_stripped)
+            self.solution_stripped = self.env['solution'].compute_solution_stripped(self.solution)
+            self.article = self.env['solution'].compute_article(self.solution_stripped, self.article)
+            self.solution_question = self.env['solution'].compute_solution_question(self.solution_stripped, self.article)
 
     def confirm(self):
         if self.solution and self.solution_stripped:
@@ -64,17 +54,6 @@ class GetSolutionWizard(models.TransientModel):
                         'question_id': question.id,
                         'answer': self.solution_answer
                     })
-            solution_question = self.env['question'].search([('name', 'ilike', self.solution_question)], limit=1)
-            if not solution_question.id:
-                solution_question = self.env['question'].create({'name': self.solution_question})
-            answer = self.env['answer'].search([('question_id', '=', solution_question.id), ('solution_id', '=', solution.id)], limit=1)
-            if not answer.id:
-                self.env['answer'].create({
-                    'solution_id': solution.id,
-                    'question_id': solution_question.id,
-                    'answer': 'yes',
-                    'is_solution': True
-                })
             if question and question.id:
                 context = dict(
                     self.env.context,

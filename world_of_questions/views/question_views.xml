@@ -16,6 +16,9 @@
           <field name="correlated_yes_no_questions" widget="many2many_tags" string="If yes, then also no" />
           <field name="correlated_no_no_questions" widget="many2many_tags" string="If no, then also no" />
           <field name="correlated_no_yes_questions" widget="many2many_tags" string="If no, then also yes" />
+          <button string="Run Correlations" name="run_correlations" type="object"/>
+          <br/><br/>
+          <field name="debug" nolabel="1"/>
         </group>
       </form>
     </field>
