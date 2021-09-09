@@ -48,3 +48,4 @@ class Solution(models.Model):
             else:
                 challenge.not_sure_action()
         self.questions_to_solution = len(challenge.asked_question_ids)
+        challenge.unlink()
