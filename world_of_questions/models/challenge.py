@@ -182,7 +182,8 @@ class Challenge(models.Model):
                 best_question = self.env['question'].browse(list(yes_answers.keys())[0])
             is_solution = self.env['answer'].search([('question_id', '=', best_question.id), ('is_solution', '=', True)], limit=1)
             if is_solution.id and len(questions) > 0:
-                answer = self.env['answer'].search([('question_id', 'in', questions.ids), ('is_solution', '=', False)], limit=1)
+                answer = self.env['answer'].search([('question_id', 'in', questions.ids), ('question_id', 'in', list(yes_answers.keys())),
+                                                    ('is_solution', '=', False)], limit=1)
                 if answer.id:
                     best_question = answer.question_id
         else:
