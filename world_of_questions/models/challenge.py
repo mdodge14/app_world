@@ -185,7 +185,14 @@ class Challenge(models.Model):
                 answer = self.env['answer'].search([('question_id', 'in', questions.ids), ('question_id', 'in', list(yes_answers.keys())),
                                                     ('is_solution', '=', False)], limit=1)
                 if answer.id:
-                    best_question = answer.question_id
+                    question = answer.question_id
+                    number_eliminated = 0
+                    if question.id in yes_answers and question.id in no_answers and yes_answers[question.id] >= no_answers[question.id]:
+                        number_eliminated = no_answers[question.id]
+                    elif question.id in yes_answers and question.id in no_answers and yes_answers[question.id] < no_answers[question.id]:
+                        number_eliminated = yes_answers[question.id]
+                    if number_eliminated > 0:
+                        best_question = answer.question_id
         else:
             best_question = questions[0]
         self.ask_question(best_question)
