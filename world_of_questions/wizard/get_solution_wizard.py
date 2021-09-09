@@ -29,6 +29,10 @@ class GetSolutionWizard(models.TransientModel):
                 self.solution_stripped = self.solution_stripped[3:].lower()
             elif self.solution_stripped[0:4].lower() == 'the ':
                 self.solution_stripped = self.solution_stripped[4:]
+            if self.article == 'a' and self.solution_stripped[0].lower() in ('a', 'e', 'i', 'o', 'u'):
+                self.article == 'an'
+            elif self.article == 'an' and self.solution_stripped[0].lower() not in ('a', 'e', 'i', 'o', 'u'):
+                self.article == 'a'
             article_text = self.article + ' ' if self.article else ''
             self.solution_question = 'Are you {}{}'.format(article_text, self.solution_stripped)
 
