@@ -15,6 +15,7 @@ class Solution(models.Model):
     article = fields.Selection([('a', 'a'), ('an', 'an'), ('the', 'the')], default='a')
     questions_to_solution = fields.Integer(readonly=True)
     question_chain = fields.Text(readonly=True)
+    solution_answers = fields.One2many('answer', 'solution_id')
 
     def compute_question_chain(self):
         i = 1
@@ -88,3 +89,19 @@ class Solution(models.Model):
                 'is_solution': True
             })
         return res
+
+    def add_answer(self):
+        context = dict(
+            self.env.context,
+            default_solution_id=self.id
+        )
+        return {
+            "name": "Add Answer",
+            "type": "ir.actions.act_window",
+            "view_mode": "form",
+            "res_model": "add.solution.answer.wizard",
+            "target": "new",
+            "binding_model_id": "solution",
+            "binding_view_types": "form",
+            "context": context,
+        }

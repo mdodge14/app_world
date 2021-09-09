@@ -12,10 +12,18 @@ class Answer(models.Model):
     _description = "Answer"
     # _order = "name"
 
+    name = fields.Char(compute='compute_name')
     solution_id = fields.Many2one('solution', string='Solution')
     question_id = fields.Many2one('question', string='Question')
     answer = fields.Selection([('yes', 'Yes'), ('no', 'No'), ('sometimes', 'Sometimes'), ('kindof', 'Kind of')], string='Answer')
     is_solution = fields.Boolean()
+
+    @api.depends('question_id', 'answer')
+    def compute_name(self):
+        for rec in self:
+            rec.name = ""
+            if rec.question_id.name and rec.answer:
+                rec.name = "{}? {}".format(rec.question_id.name, rec.answer)
 
     @api.model
     def create(self, vals):

@@ -17,6 +17,7 @@
         'views/question_views.xml',
         'views/solution_views.xml',
         'views/menu_views.xml',
+        'wizard/add_solution_answer_wizard_view.xml',
         'wizard/get_answers_wizard_view.xml',
         'wizard/get_solution_wizard_view.xml'
     ],

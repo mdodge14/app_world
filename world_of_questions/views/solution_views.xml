@@ -1,11 +1,32 @@
 <?xml version="1.0"?>
 <odoo>
 
+  <record model='ir.ui.view' id='solution_form'>
+    <field name="name">solution_form</field>
+    <field name="model">solution</field>
+    <field name="arch" type="xml">
+      <form string="Solution">
+        <div class="oe_title">
+          <h1>
+            <field name="name" placeholder="Name"/>
+          </h1>
+        </div>
+        <group>
+          <field name="article" />
+          <field name="solution_answers" widget="many2many_tags"/>
+          <button string="Add Answer" name="add_answer" type="object"/>
+          <field name="questions_to_solution" />
+          <field name="question_chain" />
+        </group>
+      </form>
+    </field>
+  </record>
+
   <record model='ir.ui.view' id='solution_tree'>
     <field name="name">solution_tree</field>
     <field name="model">solution</field>
     <field name="arch" type="xml">
-      <tree string="Solutions" editable="bottom">
+      <tree string="Solutions">
         <field name="article" />
         <field name="name" />
         <field name="questions_to_solution" />

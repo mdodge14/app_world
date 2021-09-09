@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="add_solution_answer_wizard_view" model="ir.ui.view">
+            <field name="name">add_solution_answer_wizard_view</field>
+            <field name="model">add.solution.answer.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Add Answer">
+                    <group>
+                        <field name="solution_id" invisible="1"/>
+                        <field name="question_id"/>
+                        <field name="answer"/>
+                    </group>
+                    <footer>
+                        <button name="confirm" string="Add" type="object" class="btn-primary"/>
+                        <button name="cancel" string="Cancel" type="object" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+</odoo>
