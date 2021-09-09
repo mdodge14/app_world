@@ -19,8 +19,8 @@ class Challenge(models.Model):
     possible_solutions = fields.Many2many('solution', 'challenge_possible_solutions', 'cid', 'sid')
     question_is_possible_solution = fields.Boolean()
     answers = fields.Char()
+    debug = fields.Text()
 
-    # TODO: Don't ask solution question if > 1 possible question to ask
     # TODO: When entering solution if article is 'a' or 'an' and solution changes, correct article to 'a'/'an'
     # TODO: Handle questions that might be answered wrong (e.g. flower in captivity)
     # TODO: Find/add data sources (e.g. reptile classifications, plant classifications, etc)
@@ -57,6 +57,7 @@ class Challenge(models.Model):
         self.possible_solutions = self.env['solution'].search([])
         self.question_is_possible_solution = False
         self.answers = None
+        self.debug = None
 
     def eliminate_solutions(self, answer_str):
         if answer_str in ('kind of', 'sometimes'):
@@ -64,7 +65,7 @@ class Challenge(models.Model):
         remove = []
         for solution in self.possible_solutions:
             answer = self.env['answer'].search([('question_id', '=', self.question_id.id), ('solution_id', '=', solution.id)], limit=1)
-            if answer.id and answer.answer != answer_str and answer.answer not in ('kind of', 'sometimes'):
+            if answer.id and answer.answer != answer_str and answer.answer not in ('kindof', 'sometimes'):
                 remove.append(solution.id)
         for r in remove:
             self.possible_solutions = [(3, r, 0)]
@@ -107,13 +108,18 @@ class Challenge(models.Model):
         out_of_questions = self.check_out_of_questions()
         if out_of_questions:
             return out_of_questions
+        answers = eval(self.answers) if self.answers else {}
+        self.debug = "Answers:\n"
+        for question_id in answers.keys():
+            question = self.env['question'].browse(question_id)
+            self.debug += "\t{}? {}\n".format(question.name, answers[question_id])
         if answer_str:
             for solution in self.possible_solutions:
                 answer = self.env['answer'].search([('question_id', '=', self.question_id.id), ('solution_id', '=', solution.id)], limit=1)
                 if answer.id and (answer.answer == answer_str):  # or answer_str in ('kindof', 'sometimes') or answer.answer in ('kindof', 'sometimes')):
                     possible_solutions.append(solution)
+        self.debug += "{} matches for last answer.\n".format(len(possible_solutions))
         if len(possible_solutions) == 0 and answer_str == 'no':
-            answers = eval(self.answers) if self.answers else {}
             for solution in self.possible_solutions:
                 add_solution = True
                 for question_id in answers:
@@ -124,8 +130,13 @@ class Challenge(models.Model):
                             break
                 if add_solution:
                     possible_solutions.append(solution)
+            self.debug += "{} matches for previous answers.\n".format(len(possible_solutions))
         if len(possible_solutions) == 0:
             possible_solutions = self.possible_solutions
+        else:
+            self.debug += "Possible solutions: "
+            for solution in possible_solutions:
+                self.debug += solution.name + ", "
         if len(possible_solutions) == 1:
             answer = self.env['answer'].search([('solution_id', '=', possible_solutions[0].id), ('is_solution', '=', True)], limit=1)
             if answer.id:
@@ -168,6 +179,13 @@ class Challenge(models.Model):
                     if number_eliminated > best_number_eliminated:
                         best_question = question
                         best_number_eliminated = number_eliminated
+            if best_number_eliminated == 0 and len(yes_answers) > 0:
+                best_question = self.env['question'].browse(list(yes_answers.keys())[0])
+            is_solution = self.env['answer'].search([('question_id', '=', best_question.id), ('is_solution', '=', True)], limit=1)
+            if is_solution.id and len(questions) > 0:
+                answer = self.env['answer'].search([('question_id', 'in', questions.ids), ('is_solution', '=', False)], limit=1)
+                if answer.id:
+                    best_question = answer.question_id
         else:
             best_question = questions[0]
         self.ask_question(best_question)

@@ -27,6 +27,8 @@
         <br/><br/>
         <button string="Start over" style="width:66%%" name="start_over" type="object" class="btn-link"/>
         </div>
+        <field name="debug" groups="base.group_no_one"/>
+        <field name="possible_solutions" groups="base.group_no_one"/>
       </form>
     </field>
   </record>
