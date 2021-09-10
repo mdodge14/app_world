@@ -20,6 +20,7 @@
           <br/>
           <field name="debug" nolabel="1" colspan="2"/>
           <br/><br/>
+          <field name="solution_answer_count" string="Answers"/>
           <button string="Add Answer" name="add_answer" type="object" colspan="2"/>
           <field name="solution_answers" nolabel="1" colspan="2">
             <tree editable="bottom" create="false" limit="100">

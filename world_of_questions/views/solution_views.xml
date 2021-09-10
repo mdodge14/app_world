@@ -16,6 +16,8 @@
           <field name="questions_to_solution" />
           <field name="question_chain" />
           <field name="yes_answers" />
+          <br/><br/>
+          <field name="solution_answer_count" string="Answers"/>
           <button string="Add Answer" name="add_answer" type="object"/>
           <button string="Add Solution Answer" name="add_solution_answer" type="object"/>
           <field name="solution_answers" nolabel="1" colspan="2">

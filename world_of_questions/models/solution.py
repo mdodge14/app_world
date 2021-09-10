@@ -16,7 +16,11 @@ class Solution(models.Model):
     questions_to_solution = fields.Integer(readonly=True)
     question_chain = fields.Text(readonly=True)
     solution_answers = fields.One2many('answer', 'solution_id', copy=True)
+    solution_answer_count = fields.Integer(compute='compute_answer_count')
     yes_answers = fields.Text(readonly=True)
+
+    def compute_answer_count(self):
+        self.solution_answer_count = len(self.solution_answers) if self.solution_answers else 0
 
     def compute_yes_answers(self):
         for rec in self:

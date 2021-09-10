@@ -14,11 +14,15 @@ class Question(models.Model):
 
     name = fields.Char(index=True, string='Question')
     solution_answers = fields.One2many('answer', 'question_id', copy=True)
+    solution_answer_count = fields.Integer(compute='compute_answer_count')
     correlated_yes_yes_questions = fields.Many2many('question', 'correlated_yes_yes_questions', 'if_id', 'then_id')
     correlated_yes_no_questions = fields.Many2many('question', 'correlated_yes_no_questions', 'if_id', 'then_id')
     correlated_no_no_questions = fields.Many2many('question', 'correlated_no_no_questions', 'if_id', 'then_id')
     correlated_no_yes_questions = fields.Many2many('question', 'correlated_no_yes_questions', 'if_id', 'then_id')
     debug = fields.Text()
+
+    def compute_answer_count(self):
+        self.solution_answer_count = len(self.solution_answers) if self.solution_answers else 0
 
     def run_correlations(self):
         answers = self.env['answer'].search([('question_id', '=', self.id)])
