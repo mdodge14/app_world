@@ -82,20 +82,7 @@ class Solution(models.Model):
     @api.model
     def create(self, vals):
         res = super(Solution, self).create(vals)
-        solution_stripped = res.compute_solution_stripped(res.name)
-        res.article = res.compute_article(solution_stripped, res.article)
-        solution_question_text = res.compute_solution_question(solution_stripped, res.article)
-        solution_question = self.env['question'].search([('name', 'ilike', solution_question_text)], limit=1)
-        if not solution_question.id:
-            solution_question = self.env['question'].create({'name': solution_question_text})
-        answer = self.env['answer'].search([('question_id', '=', solution_question.id), ('solution_id', '=', res.id)], limit=1)
-        if not answer.id:
-            self.env['answer'].create({
-                'solution_id': res.id,
-                'question_id': solution_question.id,
-                'answer': 'yes',
-                'is_solution': True
-            })
+        res.add_solution_answer()
         return res
 
     def add_answer(self):
@@ -113,3 +100,36 @@ class Solution(models.Model):
             "binding_view_types": "form",
             "context": context,
         }
+
+    def add_solution_answer(self):
+        solution_stripped = self.compute_solution_stripped(self.name)
+        self.article = self.compute_article(solution_stripped, self.article)
+        solution_question_text = self.compute_solution_question(solution_stripped, self.article)
+        solution_question = self.env['question'].search([('name', 'ilike', solution_question_text)], limit=1)
+        if not solution_question.id:
+            solution_question = self.env['question'].create({'name': solution_question_text})
+        answer = self.env['answer'].search([('question_id', '=', solution_question.id), ('solution_id', '=', self.id)], limit=1)
+        if not answer.id:
+            self.env['answer'].create({
+                'solution_id': self.id,
+                'question_id': solution_question.id,
+                'answer': 'yes',
+                'is_solution': True
+            })
+
+    @api.returns('self', lambda value: value.id)
+    def copy(self, default=None):
+        res = super(Solution, self).copy(default)
+        solution_answer = self.env['answer'].search([('solution_id', '=', res.id), ('is_solution', '=', True)])
+        solution_answer.unlink()
+        answers = []
+        remove_ids = []
+        for answer in res.solution_answers:
+            answer_str = "{}-{}".format(answer.solution_id.name, answer.question_id.name)
+            if answer_str in answers:
+                remove_ids.append(answer.id)
+            else:
+                answers.append(answer_str)
+        remove_answers = self.env['answer'].search([('id', 'in', remove_ids)])
+        remove_answers.unlink()
+        return res
