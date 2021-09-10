@@ -153,13 +153,30 @@ class Challenge(models.Model):
                 return
             else:
                 possible_solutions = self.possible_solutions
+        questions = self.get_remaining_questions()
         if len(self.asked_question_ids) == 1:
             if self.answers and list(answers.values())[0] == 'yes':
                 question = self.env['question'].search([('name', '=', 'Are you a person')], limit=1)
             else:
                 question = self.env['question'].search([('name', '=', 'Are you man made')], limit=1)
             return self.ask_question(question)
-        questions = self.get_remaining_questions()
+        elif len(self.asked_question_ids) == 2:
+            if self.answers and len(answers) == 2:
+                if list(answers.values())[0] == 'yes' and list(answers.values())[1] == 'yes':
+                    question = self.env['question'].search([('name', '=', 'Are you an athlete')], limit=1)
+                elif list(answers.values())[0] == 'yes' and list(answers.values())[1] == 'no':
+                    question = self.env['question'].search([('name', '=', 'Are you a reptile')], limit=1)
+                elif list(answers.values())[0] == 'no' and list(answers.values())[1] == 'no':
+                    question = self.env['question'].search([('name', '=', 'Are you a place')], limit=1)
+                else:
+                    question = self.env['question'].search([('name', '=', 'Are you a household item')], limit=1)
+            else:
+                question = self.env['question'].search([('name', '=', 'Does your name start with a letter from A to M')], limit=1)
+            return self.ask_question(question)
+        elif len(self.asked_question_ids) == 3:
+            question = self.env['question'].search([('name', '=', 'Does your name start with a letter from A to M')], limit=1)
+            if question.id in questions.ids:
+                return self.ask_question(question)
         if len(questions) > 1:
             yes_answers = {}
             no_answers = {}
