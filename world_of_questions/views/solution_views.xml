@@ -19,7 +19,7 @@
           <button string="Add Answer" name="add_answer" type="object"/>
           <button string="Add Solution Answer" name="add_solution_answer" type="object"/>
           <field name="solution_answers" nolabel="1" colspan="2">
-            <tree editable="bottom" create="false">
+            <tree editable="bottom" create="false" limit="100">
               <field name="question_id" />
               <field name="answer"/>
               <field name="is_solution"/>
