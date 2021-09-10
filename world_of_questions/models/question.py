@@ -13,7 +13,7 @@ class Question(models.Model):
     _order = "name"
 
     name = fields.Char(index=True, string='Question')
-    solution_answers = fields.One2many('answer', 'question_id')
+    solution_answers = fields.One2many('answer', 'question_id', copy=True)
     correlated_yes_yes_questions = fields.Many2many('question', 'correlated_yes_yes_questions', 'if_id', 'then_id')
     correlated_yes_no_questions = fields.Many2many('question', 'correlated_yes_no_questions', 'if_id', 'then_id')
     correlated_no_no_questions = fields.Many2many('question', 'correlated_no_no_questions', 'if_id', 'then_id')

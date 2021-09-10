@@ -15,7 +15,7 @@ class Solution(models.Model):
     article = fields.Selection([('a', 'a'), ('an', 'an'), ('the', 'the')], default='a')
     questions_to_solution = fields.Integer(readonly=True)
     question_chain = fields.Text(readonly=True)
-    solution_answers = fields.One2many('answer', 'solution_id')
+    solution_answers = fields.One2many('answer', 'solution_id', copy=True)
     yes_answers = fields.Text(readonly=True)
 
     def compute_yes_answers(self):
