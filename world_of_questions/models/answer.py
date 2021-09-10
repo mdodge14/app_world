@@ -12,13 +12,13 @@ class Answer(models.Model):
     _description = "Answer"
     _order = "is_solution desc, answer desc, name"
 
-    name = fields.Char(compute='compute_name')
+    name = fields.Char(compute='compute_name', store=True)
     solution_id = fields.Many2one('solution', string='Solution')
     question_id = fields.Many2one('question', string='Question')
     answer = fields.Selection([('yes', 'Yes'), ('no', 'No'), ('sometimes', 'Sometimes'), ('kindof', 'Kind of')], string='Answer')
     is_solution = fields.Boolean()
 
-    @api.depends('question_id', 'answer')
+    @api.depends('solution_id', 'question_id', 'answer')
     def compute_name(self):
         for rec in self:
             rec.name = ""
