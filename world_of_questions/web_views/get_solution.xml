@@ -1,0 +1,79 @@
+<odoo>
+    <template id="get_solution" name="World of Questions">
+        <t t-call="website.layout">
+            <t t-set="additional_title">World of Questions</t>
+            <form id="get_solution_form" action="/solution" method="post">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <input type="hidden" name="challenge_id" t-att-value="challenge.id"/>
+                <div class="wrap">
+                    <div class="oe_structure">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-12 pt32" style="line-height: 1.6;">
+                                    <h3 class="lead" style="text-align: left;">
+                                        <font style="font-size: 24px;">
+                                          <b>I'm out of questions!</b>
+                                        </font>
+                                    </h3>
+                                    <br/>
+                                    <span>
+                                        What were you?
+                                    </span>
+                                    <br/>
+                                    <div class='row'>
+                                        <div class="form-group col-sm-2" style="width:100px;">
+                                            <select id="article_select" name="article_select" t-attf-class="form-control">
+                                                <option t-att-value="none"></option>
+                                                <option t-att-value="a" selected="1">a</option>
+                                                <option t-att-value="an">an</option>
+                                                <option t-att-value="the">the</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-sm-10">
+                                            <input type="text" name="solution" t-att-value="solution" id="solution" class="form-control form-control-md"
+                                                   autofocus="autofocus" autocapitalize="on"/>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <span>
+                                        What's a question I should have asked?
+                                    </span>
+                                    <br/>
+                                    <div class="form-group">
+                                        <input type="text" name="question" t-att-value="question" id="question" class="form-control form-control-md"
+                                            autocapitalize="on"/>
+                                    </div>
+                                    <br/>
+                                    <span>
+                                        And the answer?
+                                    </span>
+                                    <br/>
+                                    <div t-name="answer">
+                                        <div class="form-check o_radio_item">
+                                            <input name="answer-radio" type="radio" class="form-check-input o_radio_input" checked="true" value="answer_yes" id="self_only"/>
+                                            <label class="form-check-label o_form_label" for="answer_yes">Yes</label>
+                                        </div>
+                                        <div class="form-check o_radio_item">
+                                            <input name="answer-radio" type="radio" class="form-check-input o_radio_input" value="answer_no" id="future_events"/>
+                                            <label class="form-check-label o_form_label" for="answer_no">No</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="oe_structure">
+                        <div class="container">
+                            <div class="row">
+                                <button type="submit" class="btn btn-primary float-left mb32">
+                                    Continue
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </t>
+    </template>
+</odoo>

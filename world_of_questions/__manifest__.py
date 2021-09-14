@@ -19,6 +19,7 @@
         'views/solution_views.xml',
         'views/menu_views.xml',
         'web_views/game_play.xml',
+        'web_views/get_solution.xml',
         'wizard/add_solution_answer_wizard_view.xml',
         'wizard/get_answers_wizard_view.xml',
         'wizard/get_solution_wizard_view.xml'

@@ -20,6 +20,7 @@ class Challenge(models.Model):
     question_is_possible_solution = fields.Boolean()
     answers = fields.Char()
     debug = fields.Text()
+    is_out_of_questions = fields.Boolean()
 
     # TODO: cron or check to cleanup old challenges (not the installed one)
     # TODO: Categorize solutions and update starting screen to show "the categories I can guess from"
@@ -63,6 +64,7 @@ class Challenge(models.Model):
         self.question_is_possible_solution = False
         self.answers = None
         self.debug = None
+        self.is_out_of_questions = False
 
     def eliminate_solutions(self, answer_str):
         if answer_str in ('kind of', 'sometimes'):
@@ -89,6 +91,7 @@ class Challenge(models.Model):
 
     def check_out_of_questions(self):
         if self.asked_question_ids and len(self.asked_question_ids) >= 20:
+            self.is_out_of_questions = True
             context = dict(
                 self.env.context,
                 default_challenge_id=self.id
