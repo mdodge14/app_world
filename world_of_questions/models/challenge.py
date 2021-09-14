@@ -21,6 +21,7 @@ class Challenge(models.Model):
     answers = fields.Char()
     debug = fields.Text()
 
+    # TODO: cron or check to cleanup old challenges (not the installed one)
     # TODO: Categorize solutions and update starting screen to show "the categories I can guess from"
     #       Animals, U.S. States, Make Believe Creatures, Boston Celtics Players, Household Items
     # TODO: Capture new solutions that would be answered 'yes' for new question

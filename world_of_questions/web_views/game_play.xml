@@ -1,0 +1,49 @@
+<odoo>
+    <template id="game_play" name="World of Questions">
+        <t t-call="website.layout">
+            <t t-set="additional_title">World of Questions</t>
+            <div class="wrap">
+                <div class="oe_structure">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12 pt32" style="line-height: 1.6;">
+                                <h3 class="lead" style="text-align: left;">
+                                    <font style="font-size: 24px;">
+                                      <b><t t-esc='challenge.name'/></b>
+                                    </font>
+                                </h3>
+                                <br/>
+                                <span>
+                                    <t t-esc='challenge.message'/>
+                                </span>
+                                <br/><br/>
+                                <div class="container" t-if="challenge.question_is_possible_solution and challenge.state not in ('ready', 'not playing', 'new', 'done', 'stumped')">
+                                    <a style="width: 150px" t-attf-href="/#{challenge.id}/guessed" class="btn btn-link ml-4">You guessed it!</a>
+                                </div>
+                                <br t-if="challenge.question_is_possible_solution and challenge.state not in ('ready', 'not playing', 'new', 'done', 'stumped')"/>
+                                <div class="container">
+                                    <a style="width: 100px" t-if="challenge.state not in ('not playing', 'stumped')" t-attf-href="/#{challenge.id}/yes" class="btn btn-primary ml-4">Yes</a>
+                                    <a style="width: 100px" t-if="challenge.state not in ('not playing', 'stumped')" t-attf-href="/#{challenge.id}/no" class="btn btn-secondary ml-4">No</a>
+                                    <a style="width: 150px" t-if="challenge.state == 'not playing'" t-attf-href="/#{challenge.id}/yes" class="btn btn-primary ml-4">Ready to Play</a>
+                                </div>
+                                <br t-if="challenge.state not in ('ready', 'not playing', 'new', 'done', 'stumped')"/>
+                                <div class="container" t-if="challenge.state not in ('ready', 'not playing', 'new', 'done', 'stumped')">
+                                    <a style="width: 100px" t-attf-href="/#{challenge.id}/sometimes" class="btn btn-secondary ml-4">Sometimes</a>
+                                    <a style="width: 100px" t-attf-href="/#{challenge.id}/kindof" class="btn btn-secondary ml-4">Kind of</a>
+                                </div>
+                                <br t-if="challenge.state not in ('ready', 'not playing', 'new', 'done', 'stumped')"/>
+                                <div class="container" t-if="challenge.state not in ('ready', 'not playing', 'new', 'done', 'stumped')">
+                                    <a style="width: 150px; margin-left: 50px;" t-attf-href="/#{challenge.id}/unknown" class="btn btn-secondary ml-4">I'm not sure</a>
+                               </div>
+                                <br/>
+                                <div class="container">
+                                    <a t-if="challenge.state not in ('new', 'ready', 'not playing', 'done')" t-attf-href="/#{challenge.id}/r" class="btn btn-link ml-4">Start over</a>
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>
