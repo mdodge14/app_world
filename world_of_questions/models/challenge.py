@@ -16,6 +16,7 @@ class Challenge(models.Model):
     message = fields.Char(default="Would you like to play 20 questions?", readonly=True)
     question_id = fields.Many2one('question', string='Question')
     asked_question_ids = fields.Many2many('question', 'challenge_asked_questions', 'cid', 'qid')
+    eliminated_question_ids = fields.Many2many('question', 'challenge_eliminated_questions', 'cid', 'qid')
     possible_solutions = fields.Many2many('solution', 'challenge_possible_solutions', 'cid', 'sid')
     question_is_possible_solution = fields.Boolean()
     answers = fields.Char()
@@ -23,7 +24,6 @@ class Challenge(models.Model):
     is_out_of_questions = fields.Boolean()
 
     # TODO: Add/apply more question correlations
-    # TODO: apply question correlations during game?
     # TODO: Store/retrieve first 3-5 question paths
     # TODO: cron to compute question chain, Determine first 3-5 question paths
     # TODO: cron or check to cleanup old challenges (not the installed one)
@@ -64,6 +64,7 @@ class Challenge(models.Model):
         self.name = "Hi there!"
         self.message = "Would you like to play 20 questions?"
         self.asked_question_ids = [(5, 0, 0)]
+        self.eliminated_question_ids = [(5, 0, 0)]
         self.possible_solutions = self.env['solution'].search([])
         self.question_is_possible_solution = False
         self.answers = None
@@ -78,12 +79,15 @@ class Challenge(models.Model):
             answer = self.env['answer'].search([('question_id', '=', self.question_id.id), ('solution_id', '=', solution.id)], limit=1)
             if answer.id and answer.answer != answer_str and answer.answer not in ('kindof', 'sometimes'):
                 remove.append(solution.id)
+                answer = self.env['answer'].search([('is_solution', '=', True), ('solution_id', '=', solution.id)], limit=1)
+                if answer.id:
+                    self.eliminated_question_ids = [(4, answer.question_id.id)]
         for r in remove:
             self.possible_solutions = [(3, r, 0)]
 
     def get_remaining_questions(self):
         if self.asked_question_ids:
-            questions = self.env['question'].search([('id', 'not in', self.asked_question_ids.ids)])
+            questions = self.env['question'].search([('id', 'not in', self.asked_question_ids.ids), ('id', 'not in', self.eliminated_question_ids.ids)])
         else:
             questions = self.env['question'].search([])
         return questions
@@ -112,6 +116,23 @@ class Challenge(models.Model):
             }
         return False
 
+    def handle_correlations(self, questions, answer_str):
+        for question in questions:
+            if question.id not in self.asked_question_ids.ids and question.id not in self.eliminated_question_ids.ids:
+                self.question_id = question
+                self.eliminate_solutions(answer_str)
+                self.eliminated_question_ids = [(4, question.id)]
+
+    def check_correlations(self, answer_str):
+        curr_question = self.question_id
+        if answer_str == 'yes':
+            self.handle_correlations(self.question_id.correlated_yes_yes_questions, 'yes')
+            self.handle_correlations(self.question_id.correlated_yes_no_questions, 'no')
+        elif answer_str == 'no':
+            self.handle_correlations(self.question_id.correlated_no_yes_questions, 'yes')
+            self.handle_correlations(self.question_id.correlated_no_no_questions, 'no')
+        self.question_id = curr_question
+
     def ask_next_question(self, answer_str=None):
         if len(self.asked_question_ids) == 0:
             question = self.env['question'].search([('name', '=', 'Are you a living thing')], limit=1)
@@ -121,7 +142,7 @@ class Challenge(models.Model):
             self.capture_answer(answer_str)
             self.eliminate_solutions(answer_str)
             if len(self.possible_solutions) == 0:
-                questions = self.env['question'].search([('id', 'not in', self.asked_question_ids.ids)])
+                questions = self.get_remaining_questions()
                 for question in questions:
                     is_possible_solution = self.env['answer'].search([('question_id', '=', question.id), ('is_solution', '=', True)], limit=1)
                     if is_possible_solution.id:
@@ -134,6 +155,7 @@ class Challenge(models.Model):
         for question_id in answers.keys():
             question = self.env['question'].browse(question_id)
             self.debug += "\t{}? {}\n".format(question.name, answers[question_id])
+        self.check_correlations(answer_str)
         if answer_str:
             for solution in self.possible_solutions:
                 answer = self.env['answer'].search([('question_id', '=', self.question_id.id), ('solution_id', '=', solution.id)], limit=1)
