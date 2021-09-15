@@ -22,6 +22,8 @@ class Challenge(models.Model):
     debug = fields.Text()
     is_out_of_questions = fields.Boolean()
 
+    # TODO: Get answers wizard for website
+    # TODO: get domain and apply cname, etc - update SEO details
     # TODO: cron or check to cleanup old challenges (not the installed one)
     # TODO: Categorize solutions and update starting screen to show "the categories I can guess from"
     #       Animals, U.S. States, Make Believe Creatures, Boston Celtics Players, Household Items
@@ -116,6 +118,12 @@ class Challenge(models.Model):
         if answer_str:
             self.capture_answer(answer_str)
             self.eliminate_solutions(answer_str)
+            if len(self.possible_solutions) == 0:
+                questions = self.env['question'].search([('id', 'not in', self.asked_question_ids.ids)])
+                for question in questions:
+                    is_possible_solution = self.env['answer'].search([('question_id', '=', question.id), ('is_solution', '=', True)], limit=1)
+                    if is_possible_solution.id:
+                        self.asked_question_ids = [(4, question.id)]
         out_of_questions = self.check_out_of_questions()
         if out_of_questions:
             return out_of_questions
@@ -181,6 +189,7 @@ class Challenge(models.Model):
             question = self.env['question'].search([('name', '=', 'Does your name start with a letter from A to M')], limit=1)
             if question.id in questions.ids:
                 return self.ask_question(question)
+
         if len(questions) > 1:
             yes_answers = {}
             no_answers = {}
