@@ -45,11 +45,26 @@ class AppWebsite(Home):
                 'solution_answer': 'no' if post.get('answer-radio') == 'answer_no' else 'yes'
             })
             if get_solution_wizard.confirm():
-                challenge.start_over()
-                return request.redirect("/{}/o".format(challenge.id))
+                get_answers_wizard = request.env['get.answers.wizard'].with_user(SUPERUSER_ID).create({
+                    'challenge_id': challenge.id,
+                    'solution_id': get_solution_wizard.solution_id.id,
+                    'question_id': get_solution_wizard.question_id.id,
+                })
+                return http.request.render('world_of_questions.get_answers', {'get_answers_wizard': get_answers_wizard})
         else:
             challenge.start_over()
         return request.redirect("/{}/o".format(challenge.id))
+
+    @http.route(['/answers'], type='http', auth="public", website=True, sitemap=False)
+    def add_answers(self, **post):
+        get_answers_wizard = request.env['get.answers.wizard'].with_user(SUPERUSER_ID).search([('id', '=', post.get('get_answers_wizard_id'))], limit=1)
+        get_answers_wizard.answer1 = post.get('answer1_select').lower() if post.get('answer1_select') else None
+        get_answers_wizard.answer2 = post.get('answer1_select').lower() if post.get('answer2_select') else None
+        get_answers_wizard.answer3 = post.get('answer1_select').lower() if post.get('answer3_select') else None
+        get_answers_wizard.answer4 = post.get('answer1_select').lower() if post.get('answer4_select') else None
+        get_answers_wizard.answer5 = post.get('answer1_select').lower() if post.get('answer5_select') else None
+        get_answers_wizard.confirm()
+        return request.redirect("/{}/o".format(get_answers_wizard.challenge_id.id))
 
 
 class AppWebsiteController(http.Controller):

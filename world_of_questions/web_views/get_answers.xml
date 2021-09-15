@@ -1,0 +1,95 @@
+<odoo>
+    <template id="get_answers" name="World of Questions">
+        <t t-call="website.layout">
+            <form id="get_answers_form" action="/answers" method="post">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <input type="hidden" name="get_answers_wizard_id" t-att-value="get_answers_wizard.id"/>
+                <div class="wrap">
+                    <div class="oe_structure">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-12 pt32" style="line-height: 1.6;">
+                                    <h3 class="lead" style="text-align: left;">
+                                        <font style="font-size: 24px;">
+                                          <b>Help me learn!</b>
+                                        </font>
+                                    </h3>
+                                    <br/>
+                                    <div style="font-weight: bold">How would you answer</div>
+                                    <span style="margin-left:5px;">"<span t-esc="get_answers_wizard.question" />?"</span>
+                                    <div style="font-weight: bold">for:</div>
+                                    <div t-if="get_answers_wizard.solution1" class="form-group">
+                                        <label class="col-sm-10 col-form-label text-left" t-esc="get_answers_wizard.solution1"/>
+                                        <div class="form-group col-sm-2">
+                                            <select id="answer1_select" name="answer1_select" t-attf-class="form-control-sm">
+                                                <option t-att-value="none" selected="1"></option>
+                                                <option t-att-value="yes">Yes</option>
+                                                <option t-att-value="no">No</option>
+                                                <option t-att-value="sometimes">Sometimes</option>
+                                                <option t-att-value="kindof">Kind of</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div t-if="get_answers_wizard.solution2" class="form-group">
+                                        <label class="col-sm-10 col-form-label text-left" t-esc="get_answers_wizard.solution2"/>
+                                        <div class="form-group col-sm-2">
+                                            <select id="answer2_select" name="answer12select" t-attf-class="form-control-sm">
+                                                <option t-att-value="none" selected="1"></option>
+                                                <option t-att-value="yes">Yes</option>
+                                                <option t-att-value="no">No</option>
+                                                <option t-att-value="sometimes">Sometimes</option>
+                                                <option t-att-value="kindof">Kind of</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div t-if="get_answers_wizard.solution3" class="form-group">
+                                        <label class="col-sm-10 col-form-label text-left" t-esc="get_answers_wizard.solution3"/>
+                                        <div class="form-group col-sm-2">
+                                            <select id="answer3_select" name="answer3_select" t-attf-class="form-control-sm">
+                                                <option t-att-value="none" selected="1"></option>
+                                                <option t-att-value="yes">Yes</option>
+                                                <option t-att-value="no">No</option>
+                                                <option t-att-value="sometimes">Sometimes</option>
+                                                <option t-att-value="kindof">Kind of</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div t-if="get_answers_wizard.solution4" class="form-group">
+                                        <label class="col-sm-10 col-form-label text-left" t-esc="get_answers_wizard.solution4"/>
+                                        <div class="form-group col-sm-2">
+                                            <select id="answer4_select" name="answer4_select" t-attf-class="form-control-sm">
+                                                <option t-att-value="none" selected="1"></option>
+                                                <option t-att-value="yes">Yes</option>
+                                                <option t-att-value="no">No</option>
+                                                <option t-att-value="sometimes">Sometimes</option>
+                                                <option t-att-value="kindof">Kind of</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div t-if="get_answers_wizard.solution5" class="form-group">
+                                        <label class="col-sm-10 col-form-label text-left" t-esc="get_answers_wizard.solution5"/>
+                                        <div class="form-group col-sm-2">
+                                            <select id="answer5_select" name="answer5_select" t-attf-class="form-control-sm">
+                                                <option t-att-value="none" selected="1"></option>
+                                                <option t-att-value="yes">Yes</option>
+                                                <option t-att-value="no">No</option>
+                                                <option t-att-value="sometimes">Sometimes</option>
+                                                <option t-att-value="kindof">Kind of</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br/>
+                            <div>
+                                <button type="submit" class="btn btn-primary mb32">
+                                    Continue
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </t>
+    </template>
+</odoo>

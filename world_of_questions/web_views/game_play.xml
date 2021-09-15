@@ -1,7 +1,6 @@
 <odoo>
     <template id="game_play" name="World of Questions">
         <t t-call="website.layout">
-            <t t-set="additional_title">World of Questions</t>
             <div class="wrap">
                 <div class="oe_structure">
                     <div class="container">

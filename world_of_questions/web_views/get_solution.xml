@@ -1,7 +1,6 @@
 <odoo>
     <template id="get_solution" name="World of Questions">
         <t t-call="website.layout">
-            <t t-set="additional_title">World of Questions</t>
             <form id="get_solution_form" action="/solution" method="post">
                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                 <input type="hidden" name="challenge_id" t-att-value="challenge.id"/>

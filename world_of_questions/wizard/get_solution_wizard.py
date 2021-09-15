@@ -10,6 +10,8 @@ class GetSolutionWizard(models.TransientModel):
     _description = 'Get Solution Wizard'
 
     challenge_id = fields.Many2one('challenge', string='Challenge')
+    solution_id = fields.Many2one('solution')
+    question_id = fields.Many2one('question')
     solution = fields.Char()
     article = fields.Selection([('a', 'a'), ('an', 'an'), ('the', 'the')], default='a')
     solution_question = fields.Char(compute='compute_solution_question', readonly=True)
@@ -55,6 +57,8 @@ class GetSolutionWizard(models.TransientModel):
                         'answer': self.solution_answer
                     })
             if question and question.id:
+                self.solution_id = solution.id
+                self.question_id = question.id
                 context = dict(
                     self.env.context,
                     default_challenge_id=self.challenge_id.id,
