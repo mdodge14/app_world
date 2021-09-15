@@ -23,12 +23,16 @@ class Challenge(models.Model):
     debug = fields.Text()
     is_out_of_questions = fields.Boolean()
 
+    # TODO: Handle routing issues (e.g. with with/without http and www)
     # TODO: Add/apply more question correlations
     # TODO: Store/retrieve first 3-5 question paths
     # TODO: cron to compute question chain, Determine first 3-5 question paths
     # TODO: cron or check to cleanup old challenges (not the installed one)
     # TODO: Handle questions that might be answered wrong (e.g. flower in captivity)
-    # TODO: SEO / Analytics
+    # TODO: SEO / Analytics / Search Console
+    #           https://www.odoo.com/documentation/14.0/applications/websites/website/optimize/google_analytics_dashboard.html
+    #           https://domains.google.com/registrar/worldofquestions.com/reports?_ga=2.47261550.872012918.1631637366-2038995095.1631637366
+    #           https://search.google.com/search-console?resource_id=sc-domain%3Aworldofquestions.com
     # TODO: Find/add data sources (e.g. reptile classifications, plant classifications, etc)
     # TODO: Speed up computing question chain
     # TODO: Categorize solutions and update starting screen to show "the categories I can guess from"
@@ -252,9 +256,9 @@ class Challenge(models.Model):
                 best_question = self.env['question'].browse(list(yes_answers.keys())[0])
             is_solution = self.env['answer'].search([('question_id', '=', best_question.id), ('is_solution', '=', True)], limit=1)
             if is_solution.id and len(questions) > 0:
-                answer = self.env['answer'].search([('question_id', 'in', questions.ids), ('question_id', 'in', list(yes_answers.keys())),
-                                                    ('is_solution', '=', False)], limit=1)
-                if answer.id:
+                answers = self.env['answer'].search([('question_id', 'in', questions.ids), ('question_id', 'in', list(yes_answers.keys())),
+                                                    ('is_solution', '=', False)])
+                for answer in answers:
                     question = answer.question_id
                     number_eliminated = 0
                     if question.id in yes_answers and question.id in no_answers and yes_answers[question.id] >= no_answers[question.id]:
@@ -263,6 +267,7 @@ class Challenge(models.Model):
                         number_eliminated = yes_answers[question.id]
                     if number_eliminated > 0:
                         best_question = answer.question_id
+                        break
         else:
             best_question = questions[0]
         self.ask_question(best_question)
