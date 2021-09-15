@@ -22,16 +22,18 @@ class Challenge(models.Model):
     debug = fields.Text()
     is_out_of_questions = fields.Boolean()
 
-    # TODO: Get answers wizard for website
-    # TODO: get domain and apply cname, etc - update SEO details
+    # TODO: Add/apply more question correlations
+    # TODO: apply question correlations during game?
+    # TODO: Store/retrieve first 3-5 question paths
+    # TODO: cron to compute question chain, Determine first 3-5 question paths
     # TODO: cron or check to cleanup old challenges (not the installed one)
+    # TODO: Handle questions that might be answered wrong (e.g. flower in captivity)
+    # TODO: SEO / Analytics
+    # TODO: Find/add data sources (e.g. reptile classifications, plant classifications, etc)
+    # TODO: Speed up computing question chain
     # TODO: Categorize solutions and update starting screen to show "the categories I can guess from"
     #       Animals, U.S. States, Make Believe Creatures, Boston Celtics Players, Household Items
-    # TODO: Capture new solutions that would be answered 'yes' for new question
-    # TODO: Speed up computing question chain
-    # TODO: Handle questions that might be answered wrong (e.g. flower in captivity)
-    # TODO: Find/add data sources (e.g. reptile classifications, plant classifications, etc)
-    # TODO: remove answers not in question chain? But they might be useful later with more data
+
     def yes_action(self):
         if self.state in ('new', 'not playing', 'done'):
             self.message = "Great! I'll be the guesser. Do you know what you are?"

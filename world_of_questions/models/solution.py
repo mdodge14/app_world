@@ -45,8 +45,10 @@ class Solution(models.Model):
         challenge.yes_action()
         challenge.yes_action()
         self.question_chain = ""
+        answer_ids = []
         while challenge.question_id.id != solution_question.id and len(challenge.asked_question_ids) < 20:
             solution_answer = self.env['answer'].search([('solution_id', '=', self.id), ('question_id', '=', challenge.question_id.id)], limit=1)
+            answer_ids.append(solution_answer.id)
             answer = solution_answer.answer if solution_answer.answer else 'Not Sure'
             self.question_chain += "{}: {}\n".format(challenge.question_id.name, answer)
             _logger.info("{} - {}: {}".format(self.name, challenge.question_id.name, answer))
@@ -60,7 +62,17 @@ class Solution(models.Model):
                 challenge.sometimes_action()
             else:
                 challenge.not_sure_action()
+        if challenge.question_id.id == solution_question.id:
+            solution_answer = self.env['answer'].search([('solution_id', '=', self.id), ('question_id', '=', challenge.question_id.id)], limit=1)
+            answer_ids.append(solution_answer.id)
+            self.question_chain += "{}: You guessed it!\n".format(challenge.question_id.name)
+            _logger.info("{} - {}: {}".format(self.name, challenge.question_id.name, answer))
         self.questions_to_solution = len(challenge.asked_question_ids)
+        not_asked = self.env['answer'].search([('solution_id', '=', self.id), ('id', 'not in', answer_ids)])
+        for answer in not_asked:
+            is_solution = self.env['answer'].search([('question_id', '=', answer.question_id.id), ('is_solution', '=', True)])
+            if is_solution.id:
+                answer.unlink()
         challenge.unlink()
 
     def compute_solution_stripped(self, solution_name):
