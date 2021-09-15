@@ -23,13 +23,13 @@ class Challenge(models.Model):
     debug = fields.Text()
     is_out_of_questions = fields.Boolean()
 
-    # TODO: Handle routing issues (e.g. with with/without http and www)
-    # TODO: Add/apply more question correlations
+    # TODO: Handle questions that might be answered wrong (e.g. flower in captivity)
     # TODO: Store/retrieve first 3-5 question paths
     # TODO: cron to compute question chain, Determine first 3-5 question paths
     # TODO: cron or check to cleanup old challenges (not the installed one)
-    # TODO: Handle questions that might be answered wrong (e.g. flower in captivity)
+    # TODO: Add/apply more question correlations
     # TODO: SEO / Analytics / Search Console
+    #           Analytics not picking up visits
     #           https://www.odoo.com/documentation/14.0/applications/websites/website/optimize/google_analytics_dashboard.html
     #           https://domains.google.com/registrar/worldofquestions.com/reports?_ga=2.47261550.872012918.1631637366-2038995095.1631637366
     #           https://search.google.com/search-console?resource_id=sc-domain%3Aworldofquestions.com
