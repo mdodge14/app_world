@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<odoo>
+
+  <menuitem
+      name="The Budding Page"
+      id="base_menu_budding_page"
+      groups="base.group_user"
+      action="action_stories"
+      web_icon="note,static/description/icon.png"/>
+
+</odoo>

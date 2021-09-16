@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<odoo>
+
+  <record model='ir.ui.view' id='passage_form'>
+    <field name="name">passage_form</field>
+    <field name="model">passage</field>
+    <field name="arch" type="xml">
+      <form string="Passage">
+        <group>
+          <field name="chapter_id"/>
+          <field name="summary"/>
+          <field name="text"/>
+        </group>
+      </form>
+    </field>
+  </record>
+
+  <record model='ir.ui.view' id='passage_tree'>
+    <field name="name">passage_tree</field>
+    <field name="model">passage</field>
+    <field name="arch" type="xml">
+      <tree string="Passages" editable="bottom">
+        <field name="sequence" widget="handle"/>
+        <button name="open_record" type="object" icon="fa-pencil-square-o"/>
+        <field name="chapter_id"/>
+        <field name="summary"/>
+        <field name="text"/>
+      </tree>
+    </field>
+  </record>
+
+</odoo>

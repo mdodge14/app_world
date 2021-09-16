@@ -1,0 +1,7 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+access_story,access_story,model_story,base.group_user,1,1,1,1
+access_story_version,access_story_version,model_story_version,base.group_user,1,1,1,1
+access_chapter,access_chapter,model_chapter,base.group_user,1,1,1,1
+access_chapter_version,access_chapter_version,model_chapter_version,base.group_user,1,1,1,1
+access_passage,access_passage,model_passage,base.group_user,1,1,1,1
+access_passage_version,access_passage_version,model_passage_version,base.group_user,1,1,1,1
