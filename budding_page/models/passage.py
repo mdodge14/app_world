@@ -14,8 +14,8 @@ class Passage(models.Model):
 
     sequence = fields.Integer(required=True, default=10)
     version = fields.Integer(index=True)
-    summary = fields.Text()
-    text = fields.Text()
+    summary = fields.Html()
+    text = fields.Html()
     chapter_id = fields.Many2one('chapter')
     version_ids = fields.One2many('passage.version', 'passage_id', copy=True)
     current_version_id = fields.Many2one('passage.version')
@@ -38,5 +38,6 @@ class PassageVersion(models.Model):
 
     passage_id = fields.Many2one('passage')
     version = fields.Integer(index=True)
-    text = fields.Text()
+    summary = fields.Html()
+    text = fields.Html()
 
