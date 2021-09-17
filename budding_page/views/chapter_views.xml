@@ -8,29 +8,25 @@
       <form string="Chapter">
         <div class="oe_title">
           <h1>
-            <field name="number" string="Chapter Number"/>
-            <field name="name" placeholder="Chapter Name"/>
+            <field name="name" placeholder="Name"/>
           </h1>
         </div>
-        <notebook>
-              <page string="Summary">
-                  <field name="summary"/>
-              </page>
-              <page string="Outline">
-                  <field name="outline"/>
-              </page>
-              <page string="Passages">
-                <field name="passage_ids">
-                  <tree string="Passages" editable="bottom">
-                    <field name="sequence" widget="handle"/>
-                    <button name="open_record" type="object" icon="fa-pencil-square-o"/>
-                    <field name="chapter_id"/>
-                    <field name="summary"/>
-                    <field name="text"/>
-                  </tree>
-                </field>
-              </page>
-        </notebook>
+        <group>
+          <field name="number" string="Chapter Number"/>
+          <field name="summary"/>
+        </group>
+        <div><h4>Passages</h4></div>
+        <div>
+          <field name="passage_ids">
+            <tree string="Passages" editable="bottom">
+              <field name="sequence" widget="handle"/>
+              <button name="open_record" type="object" icon="fa-pencil-square-o"/>
+              <field name="chapter_id"/>
+              <field name="summary"/>
+              <field name="text"/>
+            </tree>
+          </field>
+        </div>
       </form>
     </field>
   </record>

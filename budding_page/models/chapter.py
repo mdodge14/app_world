@@ -18,8 +18,7 @@ class Chapter(models.Model):
     version_ids = fields.One2many('chapter.version', 'chapter_id', copy=True)
     current_version_id = fields.Many2one('chapter.version')
     passage_ids = fields.One2many('passage', 'chapter_id', copy=True)
-    summary = fields.Html()
-    outline = fields.Html()
+    summary = fields.Text()
 
     def open_record(self):
         view = {
@@ -41,5 +40,4 @@ class ChapterVersion(models.Model):
     chapter_id = fields.Many2one('chapter')
     version = fields.Integer(index=True)
     passage_ids = fields.One2many('passage', 'chapter_id', copy=True)
-    summary = fields.Html()
-    outline = fields.Html()
+    summary = fields.Text()

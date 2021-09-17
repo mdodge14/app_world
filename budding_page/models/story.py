@@ -16,8 +16,6 @@ class Story(models.Model):
     version_ids = fields.One2many('story.version', 'story_id', copy=True)
     current_version_id = fields.Many2one('story.version')
     chapter_ids = fields.One2many('chapter', 'story_id', copy=True)
-    summary = fields.Html()
-    outline = fields.Html()
 
     def open_record(self):
         view = {
@@ -39,5 +37,3 @@ class StoryVersion(models.Model):
     story_id = fields.Many2one('story')
     version = fields.Integer(index=True)
     chapter_ids = fields.One2many('chapter', 'story_id', copy=True)
-    summary = fields.Html()
-    outline = fields.Html()

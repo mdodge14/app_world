@@ -11,24 +11,17 @@
             <field name="name" placeholder="Name"/>
           </h1>
         </div>
-        <notebook>
-              <page string="Summary">
-                  <field name="summary"/>
-              </page>
-              <page string="Outline">
-                  <field name="outline"/>
-              </page>
-              <page string="Chapters">
-                  <field name="chapter_ids">
-                    <tree string="Chapters" editable="bottom">
-                        <field name="number" widget="handle"/>
-                        <button name="open_record" type="object" icon="fa-pencil-square-o"/>
-                        <field name="name"/>
-                        <field name="summary"/>
-                    </tree>
-                  </field>
-              </page>
-        </notebook>
+        <div><h4>Chapters</h4></div>
+        <div>
+          <field name="chapter_ids">
+            <tree string="Chapters" editable="bottom">
+                <field name="number" widget="handle"/>
+                <button name="open_record" type="object" icon="fa-pencil-square-o"/>
+                <field name="name"/>
+                <field name="summary"/>
+            </tree>
+          </field>
+        </div>
       </form>
     </field>
   </record>
@@ -40,7 +33,6 @@
       <tree string="Stories" editable="top">
           <button name="open_record" type="object" icon="fa-pencil-square-o"/>
           <field name="name"/>
-          <field name="summary"/>
       </tree>
     </field>
   </record>
